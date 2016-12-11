@@ -1,13 +1,159 @@
 % !TEX root = ../main.tex
 
-\chapter{均匀三角形分割算法}
-如上文所述，光滑自由变形需将模型沿节点盒切割，并将非三角形的面片三角化。这一过程很可能产生狭长三角形或者蜕化三角形。过多的此类三角形不能会浪费计算资源，还可能带来很多数值计算方面的问题。
+\chapter{三角均匀部分算法}
+如上文所述，光滑自由变形需将模型沿节点盒切割，并将非三角形的面片三角化。这一过程很可能产生狭长三角形或者蜕化三角形，如\autoref{subfig:clip_compare0}所示，颜色越红表示三角形质量越差。过多的此类三角形不仅会浪费计算资源，还可能带来其它数值计算方面的问题。
 
-另一方面，沿节点盒切割只是为了保证变形结果是严格的$n$次三角贝赛尔曲面片。若略去这一步骤，算法仍能继续，只是结果会变得不精确。考虑到地光滑自由变形中，作者采用以精度换取效率的策略，用三次的三角贝赛尔曲面拟合n次的精确结果，所以光滑自由变形的结果只是精确结果的近似。所以光滑自由变形中“沿节点盒以保证结果精确”这一步骤就显的可有可无了。
+另一方面，沿节点盒切割只是为了保证变形结果是严格的$n$次三角贝赛尔曲面片。若略去这一步骤，算法仍能继续，只不过结果会变得不精确。考虑到在光滑自由变形中，作者采用以精度换取效率的策略，用三次的三角贝赛尔曲面来拟合n次的精确结果，也就是说光滑自由变形的结果只是精确结果的近似。因此，光滑自由变形中“沿节点盒切割以保证结果精确”这一步骤就显的可有可无了。
 
-因此，本文尝试提出一种新的三角形分割算法，以替换光滑自由变形中的沿节点盒切割这一步骤。
+而且，我们通过更进一步的观察发现，在光滑自由变形中，跨多个节点盒的三角面片只要足够小，其变形后在精度上的误差，相对于在节点盒内的三角面片而言，并不会显著增加。
 
-\section{三角均匀部分算法}
+因此，本文尝试提出一种更好的三角形分割算法，以替换光滑自由变形中的“沿节点盒切割”这一步骤。新算法不再沿节点盒切割三角面片，而是将三角面片按以下两个要求分割成子三角形：
+\begin{itemize}
+    \item 所有子三角形的三边长都尽可能相等。以得到形状尽可能接近正三角形，且面积尽可能相同的子三角形。
+    \item 所有子三角形的顶点均不可位于其它子三角形的边上。以避免变形后产生裂缝。
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_compare0.png}
+		\caption{沿节点盒切割}\label{subfig:clip_compare0}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_compare1.png}
+		\caption{本文方法}\label{subfig:clip_compare1}
+	\end{subfigure}
+	\caption{两种切割算法产生的子三角形的质量对比}\label{fig:subfig_test1}
+\end{figure}
+
+\section{算法实现}
+首先我们先定义一些符号以方便描述算法实现。$l$，$t$为算法的输入，$l$表示子三角形边长的期望值，算法分割产生的子三角形的三边的长度需尽可能接近$l$。$t$表示待分割的三角面片。$\{e_i\}^{3}_{i=0}$为$t$的三条边。$\{len_i\}^{3}_{i=0}$代表三边的边长。$t$的每条边会被均匀分成$\lceil len_i/l \rceil$段。$p_{ij}$表示三角形第i条边的第j个分割点。
+
+算法流程：
+\begin{enumerate}
+    \item 找出三角面片最小的内角$\alpha$，不妨假定角$\alpha$的两条边为$e_0$, $e_1$。
+    \item 将$e_0$、$e_1$分别均匀分成$\lceil len_0/l \rceil$、$\lceil len_0/l \rceil$段，产生的切割点的有序集合\footnote{切割点包括边的首尾端点}为$\{p_{0j}\}^{\lceil len_0/l \rceil}_{j=0}$、$\{p_{1j}\}^{\lceil len_1/l \rceil}_{j=0}$，且$j$沿角$\alpha$的顶点至另一端点方向依次增长。分割点如\autoref{subfig:clip1}所示。
+    \item 将子三角形$p_{00}p_{01}p_{11}$分割下来，如\autoref{subfig:clip2}所示。
+    \item 剩下的部分是一个类似于梯形的四边形，如\autoref{subfig:clip2}中红色部分所示。如果$\lceil len_0/l \rceil == \lceil len_0/l \rceil$，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{\lceil len_0/l \rceil - 1}_{j=0}$分割成子三角形，如\autoref{subfig:clip6}、\autoref{subfig:clip9}所示，直到将所有四边形均分割完毕，然后直接跳转到步骤\ref{CVT}；否则\footnote{$\lceil len_0/l \rceil \ne \lceil len_0/l \rceil$}，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{min(\lceil len_0/l \rceil, \lceil len_1/l \rceil) - 2}_{j=0}$分割成子三角形，剩余部分如\autoref{subfig:clip16}所示。\label{recursion}
+    \item \autoref{subfig:clip16}中剩余部分若逆时针旋转90度，我们可以发现剩余部分和\autoref{subfig:clip3}类似。所以我们递归的进行步骤\ref{recursion}，直到三角形分割完毕。\label{recursion2}
+    \item 对分割结果进行5次CVT优化，使子三角形边长更加接近$l$。\label{CVT}
+\end{enumerate}
+
+在步骤\ref{recursion2}中，递归到最后阶段，可能会出现步骤\ref{recursion}处理不了的特殊情况。但是特殊情况的类型不会很多，所以我们为每一种特殊情况指定了对应的分割方案。
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure0.png}
+		\caption{初始三角面片}\label{subfig:clip0}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure1.png}
+		\caption{初始三角面片}\label{subfig:clip1}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure2.png}
+		\caption{分割最小角$\alpha$的两条边}\label{subfig:clip2}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure3.png}
+		\caption{切割第一个子三角形}\label{subfig:clip3}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure4.png}
+		\caption{第一个待分割层}\label{subfig:clip4}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure5.png}
+		\caption{分割待分割层的上下底边}\label{subfig:clip5}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure6.png}
+		\caption{分割待侵害层的上下底边}\label{subfig:clip6}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure9.png}
+		\caption{分割待侵害层的上下底边}\label{subfig:clip9}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure16.png}
+		\caption{继续侵害红色部分}\label{subfig:clip16}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure26.png}
+		\caption{对特殊情况进行处理}\label{subfig:clip26}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure33.png}
+		\caption{分割结果}\label{subfig:clip33}
+	\end{subfigure}
+	\begin{subfigure}[b]{.32\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_figure34.png}
+		\caption{对结果进行CVT优化}\label{subfig:clip34}
+	\end{subfigure}
+	\caption{均匀三角剖分算法}\label{fig:clip}
+\end{figure}
+
+\section{CVT优化}
+CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之前的结果，灰色的是优化之后的。我们可以发现，第5次及之后的迭代收益不大。所以我们最终对结果进行5次CVT迭代优化。
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper0.png}
+		\caption{第1次CVT优化}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper1.png}
+		\caption{第2次CVT优化}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper2.png}
+		\caption{第3次CVT优化}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper3.png}
+		\caption{第4次CVT优化}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper4.png}
+		\caption{第5次CVT优化}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{cvt_for_paper5.png}
+		\caption{1～10次CVT优化}
+	\end{subfigure}
+    \caption{CVT优化结果} \label{fig:CVT}
+\end{figure}
+
+
+\section{$l$的选取}
+
 
 
 
@@ -15,7 +161,6 @@
 \section{demo}
 以下是一个测试用的列表环境，内容不要在意。\footnote{正文中中脚注命令测试，长脚注情况：这包括如下事实：“未经本人同意，监听、录制或转播私人性质的谈话或秘密谈话；未经本人同意，拍摄、录制或转播个人在私人场所的形象”}
 
-这里测试列表标签功能的交叉引用格式\ref{itm:11},\ref{itm:12},\ref{itm:13},\ref{itm:14}，分别表示第一至第四层级的itemize系列的交叉引用情况。
 \begin{enumerate}
 	\item 第一级列表\label{itm:11}
 	\begin{enumerate}
