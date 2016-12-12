@@ -168,7 +168,65 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 对于不同的$l$对三角形质量的影响如所示\textcolor{red}{需另外作图}，可以$l$越小，三角形质量越高。
 
 \subsection{变形结果精度}
-如前方所述，我们可以通过$l$控制子三角形的大小。三角形过大，误差就会增加；三角形过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。所以我们做了很多工作，以找出合适的$l$。
+如前方所述，我们可以通过$l$控制子三角形的大小。三角形过大，误差就会增加；三角形过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。我们需要找出合适大小的$l$，使结果精度和效率有一个较好的平衡。为此我们用不同的$l$分割了各种不同类型的模型，得到如\autoref{fig:l}所示的结果。
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.2\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_cube_e.png}
+		\label{subfig:ln_cube_e}
+	\end{subfigure}
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_cube.png}
+		\label{subfig:ln_cube}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_r_cube.png}
+		\label{subfig:ln_r_cube}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.2\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_mobile_e.png}
+		\label{subfig:ln_mobile_e}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_mobile.png}
+		\label{subfig:ln_mobile}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_r_mobile.png}
+		\label{subfig:ln_r_mobile}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{.2\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_bear_e.png}
+		\label{subfig:ln_bear_e}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_bear.png}
+		\label{subfig:ln_bear}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[b]{.35\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{ln_r_bear.png}
+		\label{subfig:ln_r_bear}
+	\end{subfigure}
+
+	\caption{三角形数目对变形结果的影响}\label{fig:l}
+\end{figure}
 
 
 
