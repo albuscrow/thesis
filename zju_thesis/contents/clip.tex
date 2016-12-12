@@ -13,23 +13,16 @@
     \item 所有子三角形的顶点均不可位于其它子三角形的边上。以避免变形后产生裂缝。
 \end{itemize}
 
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{clip_compare0.png}
-		\caption{沿节点盒切割}\label{subfig:clip_compare0}
-	\end{subfigure}%
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{clip_compare1.png}
-		\caption{本文方法}\label{subfig:clip_compare1}
-	\end{subfigure}
-	\caption{两种切割算法产生的子三角形的质量对比}\label{fig:subfig_test1}
-\end{figure}
+我们的新算法相比原来的沿节点盒分割的算法而言有两点优势：
+\begin{itemize}
+        \item 切分出来的子三角形尽可能“正”，不会产生新的狭长或蜕化的三角形。
+        \item 参数$l$使得用户可以控制产生的子三角形的大小。
+\end{itemize}
+
 
 \section{算法实现}
-首先我们先定义一些符号以方便描述算法实现。$l$，$t$为算法的输入，$l$表示子三角形边长的期望值，算法分割产生的子三角形的三边的长度需尽可能接近$l$。$t$表示待分割的三角面片。$\{e_i\}^{3}_{i=0}$为$t$的三条边。$\{len_i\}^{3}_{i=0}$代表三边的边长。$t$的每条边会被均匀分成$\lceil len_i/l \rceil$段。$p_{ij}$表示三角形第i条边的第j个分割点。
+\subsection{算法步骤}
+首先我们先定义一些符号以方便描述算法实现。$l$，$t$为算法的输入，$l$表示子三角形边长的期望值，算法分割产生的子三角形的三边的长度需尽可能接近$l$。$t$表示待分割的三角面片。$\{e_i\}^{2}_{i=0}$为$t$的三条边。$\{len_i\}^{2}_{i=0}$代表三边的边长。$t$的每条边会被均匀分成$\lceil len_i/l \rceil$段。$p_{ij}$表示三角形第i条边的第j个分割点。
 
 算法流程：
 \begin{enumerate}
@@ -111,7 +104,7 @@
 	\caption{均匀三角剖分算法}\label{fig:clip}
 \end{figure}
 
-\section{CVT优化}
+\subsection{CVT优化}
 CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之前的结果，灰色的是优化之后的。我们可以发现，第5次及之后的迭代收益不大。所以我们最终对结果进行5次CVT迭代优化。
 
 \begin{figure}[htbp]
@@ -151,10 +144,31 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
     \caption{CVT优化结果} \label{fig:CVT}
 \end{figure}
 
-
 \section{$l$的选取}
+前文提到的$l$是一个很关键的参数，$l$不仅可以通过控制子三角形的大小来影响变形结果的精度，还能直接影响子三角形的质量\footnote{这里的质量表示接近正三角形的程度}。所以我们尝试用以下两个指标来决定$l$的取值：
 
+\subsection{三角形质量}
+有很多指标都可以衡量三角形质量\cite{pebay2003}，我们选取了其中计算量较少的一个$q(t)=r_t/max(\{e_i\}^{2}_{i=0})$，即三角形外接圆的半径除以其最长边。该指标的取值范围是$(0, \frac{\sqrt{3}}{2}]$，当三角形$t$为正三角形时，$q(t)$取到最大值$\frac{\sqrt{3}}{2}$；三角形$t$越狭长，$q(t)$的值越接近0。为了更直观的用该指标表示三角形质量，我们修改将$q(t)$修改为$q(t)=r_t/max(\{e_i\}^{2}_{i=0})*2\sqrt{3}$，使其取值范围为$(0, 1]$。\autoref{fig:triangle_quality_compare}可视化了两种三角形分割方法产生的三角形的质量，可见本文方法产生的三角形质量要好很多。
 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_compare0.png}
+		\caption{沿节点盒切割}\label{subfig:clip_compare0}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{clip_compare1.png}
+		\caption{本文方法}\label{subfig:clip_compare1}
+	\end{subfigure}
+	\caption{两种切割算法产生的子三角形的质量对比}\label{fig:triangle_quality_compare}
+\end{figure}
+
+对于不同的$l$对三角形质量的影响如所示\textcolor{red}{需另外作图}，可以$l$越小，三角形质量越高。
+
+\subsection{变形结果精度}
+如前方所述，我们可以通过$l$控制子三角形的大小。三角形过大，误差就会增加；三角形过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。所以我们做了很多工作，以找出合适的$l$。
 
 
 
