@@ -21,7 +21,6 @@
 
 
 \section{算法实现}
-\subsection{算法步骤}
 首先我们先定义一些符号以方便描述算法实现。$l$，$t$为算法的输入，$l$表示子三角形边长的期望值，算法分割产生的子三角形的三边的长度需尽可能接近$l$。$t$表示待分割的三角面片。$\{e_i\}^{2}_{i=0}$为$t$的三条边。$\{len_i\}^{2}_{i=0}$代表三边的边长。$t$的每条边会被均匀分成$\lceil len_i/l \rceil$段。$p_{ij}$表示三角形第i条边的第j个分割点。
 
 算法流程：
@@ -29,7 +28,7 @@
     \item 找出三角面片最小的内角$\alpha$，不妨假定角$\alpha$的两条边为$e_0$, $e_1$。
     \item 将$e_0$、$e_1$分别均匀分成$\lceil len_0/l \rceil$、$\lceil len_0/l \rceil$段，产生的切割点的有序集合\footnote{切割点包括边的首尾端点}为$\{p_{0j}\}^{\lceil len_0/l \rceil}_{j=0}$、$\{p_{1j}\}^{\lceil len_1/l \rceil}_{j=0}$，且$j$沿角$\alpha$的顶点至另一端点方向依次增长。分割点如\autoref{subfig:clip1}所示。
     \item 将子三角形$p_{00}p_{01}p_{11}$分割下来，如\autoref{subfig:clip2}所示。
-    \item 剩下的部分是一个类似于梯形的四边形，如\autoref{subfig:clip2}中红色部分所示。如果$\lceil len_0/l \rceil == \lceil len_0/l \rceil$，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{\lceil len_0/l \rceil - 1}_{j=0}$分割成子三角形，如\autoref{subfig:clip6}、\autoref{subfig:clip9}所示，直到将所有四边形均分割完毕，然后直接跳转到步骤\ref{CVT}；否则\footnote{$\lceil len_0/l \rceil \ne \lceil len_0/l \rceil$}，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{min(\lceil len_0/l \rceil, \lceil len_1/l \rceil) - 2}_{j=0}$分割成子三角形，剩余部分如\autoref{subfig:clip16}所示。\label{recursion}
+    \item 剩下的部分是一个类似于梯形的四边形，如\autoref{subfig:clip2}中红色部分所示。如果$\lceil len_0/l \rceil == \lceil len_1/l \rceil$，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{\lceil len_0/l \rceil - 1}_{j=0}$分割成子三角形，如\autoref{subfig:clip6}、\autoref{subfig:clip9}所示，直到将所有四边形均分割完毕，然后直接跳转到步骤\ref{CVT}；否则\footnote{$\lceil len_0/l \rceil \ne \lceil len_1/l \rceil$}，我们依次将四边形$\{p_{0j}p_{1j}p_{1(j+1)}p_{0(j+1)}\}^{min(\lceil len_0/l \rceil, \lceil len_1/l \rceil) - 2}_{j=0}$分割成子三角形，剩余部分如\autoref{subfig:clip16}所示。\label{recursion}
     \item \autoref{subfig:clip16}中剩余部分若逆时针旋转90度，我们可以发现剩余部分和\autoref{subfig:clip3}类似。所以我们递归的进行步骤\ref{recursion}，直到三角形分割完毕。\label{recursion2}
     \item 对分割结果进行5次CVT优化，使子三角形边长更加接近$l$。\label{CVT}
 \end{enumerate}
@@ -104,8 +103,7 @@
 	\caption{均匀三角剖分算法}\label{fig:clip}
 \end{figure}
 
-\subsection{CVT优化}
-CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之前的结果，灰色的是优化之后的。我们可以发现，第5次及之后的迭代收益不大。所以我们最终对结果进行5次CVT迭代优化。
+CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之后的结果，灰色的是优化之前的。我们可以发现，第5次及之后的迭代收益不大。所以我们最终对结果进行5次CVT迭代优化。
 
 \begin{figure}[htbp]
 	\centering
@@ -144,10 +142,18 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
     \caption{CVT优化结果} \label{fig:CVT}
 \end{figure}
 
-\section{$l$的选取}
-前文提到的$l$是一个很关键的参数，$l$不仅可以通过控制子三角形的大小来影响变形结果的精度，还能直接影响子三角形的质量\footnote{这里的质量表示接近正三角形的程度}。所以我们尝试用以下两个指标来决定$l$的取值：
+\section{关于$l$的讨论}
+前文提到的$l$是一个很关键的参数，$l$不仅会影响算法效率、子三角形的质量\footnote{这里的质量表示接近正三角形的程度}、还能影响变形结果的精度。但是，$l$并不是影响这些的直接因素，对子三角形的质量和算法效率产生直接影响的是子三角形的数目，而对变形结果的精度产生直接影响的是子三角形的平均面积。$l$则通过改变子三角形平均面积或数目，间接地对算法效率、子三角形的质量、变形结果的精度产生影响。
 
-\subsection{三角形质量}
+定性的来说$l$越小，子三角形数目越多，面积越小，同时子三角形的质量越高，算法的计算代价越高，变形结果的误差越小。但为了进一步明确$l$对算法的影响，我们进行了一系列实验以定量的分析$l$。
+
+实验选用了立方体、手机和兔子玩偶为模型，它们分别有12、178、8400个面片，代表不同复杂度的模型。模型将被归一化到$[-1, 1]^3$。变形空间的次数是$3\times3\times3$，控制顶点个数是$5\times5\times5$。实验的自变量是$l$，因变量是算法效率、子三角形的质量、变形结果的精度。以下是实验结果。
+
+
+\subsection{算法效率}
+\textcolor{red}{需另外作图}
+
+\subsection{子三角形质量}
 有很多指标都可以衡量三角形质量\cite{pebay2003}，我们选取了其中计算量较少的一个$q(t)=r_t/max(\{e_i\}^{2}_{i=0})$，即三角形外接圆的半径除以其最长边。该指标的取值范围是$(0, \frac{\sqrt{3}}{2}]$，当三角形$t$为正三角形时，$q(t)$取到最大值$\frac{\sqrt{3}}{2}$；三角形$t$越狭长，$q(t)$的值越接近0。为了更直观的用该指标表示三角形质量，我们修改将$q(t)$修改为$q(t)=r_t/max(\{e_i\}^{2}_{i=0})*2\sqrt{3}$，使其取值范围为$(0, 1]$。\autoref{fig:triangle_quality_compare}可视化了两种三角形分割方法产生的三角形的质量，可见本文方法产生的三角形质量要好很多。
 
 \begin{figure}[htbp]
@@ -165,10 +171,10 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 	\caption{两种切割算法产生的子三角形的质量对比}\label{fig:triangle_quality_compare}
 \end{figure}
 
-对于不同的$l$对三角形质量的影响如所示\textcolor{red}{需另外作图}，可以$l$越小，三角形质量越高。
+对于不同的$l$对三角形质量的影响如所示\textcolor{red}{需另外作图}，可见$l$越小，三角形质量越高\textcolor{red}{添加更加详细的结论}。
 
 \subsection{变形结果精度}
-如前方所述，我们可以通过$l$控制子三角形的大小。三角形过大，误差就会增加；三角形过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。我们需要找出合适大小的$l$，使结果精度和效率有一个较好的平衡。为此我们用不同的$l$分割了各种不同类型的模型，得到如\autoref{fig:l}所示的结果。
+如前方所述，三角形面积过大，误差就会增加；三角形面积过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。我们需要找出合适大小的$l$，使结果精度和效率有一个较好的平衡。为此我们用不同的$l$分割了各种不同类型的模型，得到如\autoref{fig:l}所示的结果。
 
 \begin{figure}[htbp]
 	\centering
@@ -227,8 +233,6 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 
 	\caption{三角形数目对变形结果的影响}\label{fig:l}
 \end{figure}
-
-
 
 \section{demo}
 以下是一个测试用的列表环境，内容不要在意。\footnote{正文中中脚注命令测试，长脚注情况：这包括如下事实：“未经本人同意，监听、录制或转播私人性质的谈话或秘密谈话；未经本人同意，拍摄、录制或转播个人在私人场所的形象”}
