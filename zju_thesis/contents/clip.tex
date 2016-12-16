@@ -1,6 +1,6 @@
 % !TEX root = ../main.tex
 
-\chapter{三角均匀部分算法}
+\chapter{三角均匀剖分算法}
 如上文所述，光滑自由变形需将模型沿节点盒切割，并将非三角形的面片三角化。这一过程很可能产生狭长三角形或者蜕化三角形，如\autoref{subfig:clip_compare0}所示，颜色越红表示三角形质量越差。过多的此类三角形不仅会浪费计算资源，还可能带来其它数值计算方面的问题。
 
 另一方面，沿节点盒切割只是为了保证变形结果是严格的$n$次三角贝赛尔曲面片。若略去这一步骤，算法仍能继续，只不过结果会变得不精确。考虑到在光滑自由变形中，作者采用以精度换取效率的策略，用三次的三角贝赛尔曲面来拟合n次的精确结果，也就是说光滑自由变形的结果只是精确结果的近似。因此，光滑自由变形中“沿节点盒切割以保证结果精确”这一步骤就显的可有可无了。
@@ -160,8 +160,7 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 \end{figure}
 
 \subsection{算法效率}
-虽然自变量是$l$，但从\autoref{fig:l-number}可以看出不同的$l$可以对应相同的子三角形数目
-
+从\autoref{fig:l-number}可以看出不同的$l$可能产生相同的分割结果，所以\autoref{fig:l-time0}中，$l$与算法运算时间的关系不是很直观。如前文所述，$l$通过影响子三角形数目，从而影响算法运算时间，所以我们直接探究子三角形数目和算法运算时间的关系。如\autoref{fig:l-time1}中所示，大体上来看，算法运行时间与子三角形数目呈线性正相关。
 
 \begin{figure}[htbp]
 	\centering
@@ -175,7 +174,7 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 	    \includegraphics[width =\textwidth]{l-time1.png}
 	    \caption{三角形数目-算法运行时间关系图}\label{fig:l-time1}
 	\end{subfigure}
-	\caption{$l$取值-算法效率}\label{fig:l-time0}
+	\caption{$l$取值-算法效率}\label{fig:l-time}
 \end{figure}
 
 \subsection{子三角形质量}
@@ -183,12 +182,12 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 
 \begin{figure}[htbp]
 	\centering
-	\begin{subfigure}[b]{.4\textwidth}
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{clip_compare0.png}
 		\caption{沿节点盒切割}\label{subfig:clip_compare0}
 	\end{subfigure}%
-	\begin{subfigure}[b]{.4\textwidth}
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{clip_compare1.png}
 		\caption{本文方法}\label{subfig:clip_compare1}
@@ -196,233 +195,36 @@ CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进�
 	\caption{两种切割算法产生的子三角形的质量对比}\label{fig:triangle_quality_compare}
 \end{figure}
 
-对于不同的$l$对三角形质量的影响如所示\textcolor{red}{需另外作图}，可见$l$越小，三角形质量越高\textcolor{red}{添加更加详细的结论}。
+对于不同的$l$对三角形质量的影响如\autoref{fig:l-quality}所示。我们分别作了$l$取值、子三角形数目与子三角形质量的关系图。可见$l$越小，三角形质量越高。但是由于切割算法中存在取整操作，所以\autoref{fig:l-quality}存在许多跳变的地方。
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.45\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{l-quality0.png}
+		\caption{$l$取值-子三角形质量关系图}\label{subfig:l-quality0}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{l-quality1.png}
+		\caption{子三角形数目-子三角形质量关系图}\label{subfig:l-quality1}
+	\end{subfigure}
+	\caption{$l$取值-子三角形的质量对比}\label{fig:l-quality}
+\end{figure}
 
 \subsection{变形结果精度}
-如前方所述，三角形面积过大，误差就会增加；三角形面积过小，误差会相应减小，但同时三角形数目会增加，造成浪费计算的资源。我们需要找出合适大小的$l$，使结果精度和效率有一个较好的平衡。为此我们用不同的$l$分割了各种不同类型的模型，得到如\autoref{fig:l}所示的结果。
-
+相比于光滑自由变形，本文方法会产生跨节点盒的子三角形。这些三角形会引入额外的误差。但是只要子三角足够小，误差就能控制在可接受范围内。我们同样做了实验以验证$l$取值与变形误差的关系。从\autoref{fig:l-error}中可以看出，变形结果的几何误差基本与子三角形面积呈线性正相关。
 \begin{figure}[htbp]
 	\centering
-	\begin{subfigure}[b]{.2\textwidth}
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
-		\includegraphics[width = \textwidth]{ln_cube_e.png}
-		\label{subfig:ln_cube_e}
-	\end{subfigure}
-	\begin{subfigure}[b]{.35\textwidth}
+		\includegraphics[width = \textwidth]{l-error0.png}
+		\caption{$l$取值-子三角形质量关系图}\label{subfig:l-error0}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
-		\includegraphics[width = \textwidth]{ln_cube.png}
-		\label{subfig:ln_cube}
+		\includegraphics[width = \textwidth]{l-error1.png}
+		\caption{子三角形数目-子三角形质量关系图}\label{subfig:l-error1}
 	\end{subfigure}
-    \quad
-	\begin{subfigure}[b]{.35\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_r_cube.png}
-		\label{subfig:ln_r_cube}
-	\end{subfigure}
-
-	\begin{subfigure}[b]{.2\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_mobile_e.png}
-		\label{subfig:ln_mobile_e}
-	\end{subfigure}
-    \quad
-	\begin{subfigure}[b]{.35\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_mobile.png}
-		\label{subfig:ln_mobile}
-	\end{subfigure}
-    \quad
-	\begin{subfigure}[b]{.35\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_r_mobile.png}
-		\label{subfig:ln_r_mobile}
-	\end{subfigure}
-
-	\begin{subfigure}[b]{.2\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_bear_e.png}
-		\label{subfig:ln_bear_e}
-	\end{subfigure}
-    \quad
-	\begin{subfigure}[b]{.35\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_bear.png}
-		\label{subfig:ln_bear}
-	\end{subfigure}
-    \quad
-	\begin{subfigure}[b]{.35\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{ln_r_bear.png}
-		\label{subfig:ln_r_bear}
-	\end{subfigure}
-
-	\caption{三角形数目对变形结果的影响}\label{fig:l}
+	\caption{$l$取值-变形误差}\label{fig:l-error}
 \end{figure}
-
-\section{demo}
-以下是一个测试用的列表环境，内容不要在意。\footnote{正文中中脚注命令测试，长脚注情况：这包括如下事实：“未经本人同意，监听、录制或转播私人性质的谈话或秘密谈话；未经本人同意，拍摄、录制或转播个人在私人场所的形象”}
-
-\begin{enumerate}
-	\item 第一级列表\label{itm:11}
-	\begin{enumerate}
-		\item 第二级列表\label{itm:12}
-	\end{enumerate}
-\end{enumerate}
-
-\begin{itemize}
-	\item 第一级列表
-	\begin{itemize}
-		\item 第二级列表
-	\end{itemize}
-\end{itemize}
-
-\section{浮动体测试}
-\subsection{插图测试}
-如\autoref{fig:first_image_tset}是对此模版的第一张插图测试。
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width = 0.5\linewidth]{Chapter1.png}
-	\caption{第一张插图测试}\label{fig:first_image_tset}
-\end{figure}
-
-\subsection{表格测试}
-
-\subsubsection{array宏包tabular表格环境测试}
-如\autoref{tab:first_table_test}是对array宏包的tabular表格环境测试。
-\begin{table}[htbp]
-	\centering
-	\caption{这是一个用tabular环境的测试用的表格}\label{tab:first_table_test}
-    \begin{tabular}{lrr}
-    \toprule
-    \textbf{行星}     & \textbf{赤道半径}km & \textbf{公转周期}d \\
-    \midrule
-    水星     & 2.439  & 87.9 \\
-    金星     & 6.1    & 224.682 \\
-    地球     & 6378.14 & 365.24 \\
-    \bottomrule
-    \end{tabular}%
-\end{table}
-
-\subsubsection{tabu宏包表格环境测试}
-如\autoref{tab:tabu_test_1}是对tabu宏包的tabu表格环境测试。在这里表格命令与\autoref{tab:first_table_test}的命令相同，只是tabular环境改成了tabu环境。
-\begin{table}[htbp]
-	\centering
-	\caption{这是一个用tabu环境的测试用的表格}\label{tab:tabu_test_1}
-    \begin{tabu}{lrr}
-    \toprule
-    \textbf{行星}     & \textbf{赤道半径}km & \textbf{公转周期}d \\
-    \midrule
-    水星     & 2.439  & 87.9 \\
-    金星     & 6.1    & 224.682 \\
-    地球     & 6378.14 & 365.24 \\
-    \bottomrule
-    \end{tabu}%
-\end{table}
-
-\autoref{tab:tabu_test_2}对tabu to表格的x列模式进行测试。在表格导言区中设置为X[1]X[2]X[2]，表示这三列表格的列宽比值为1:2:2，总的表格宽度由tabu to环境设置，这里设置为0.6\textbackslash linewidth。相比于tabular环境，tabu环境的列宽设置方便许多。
-\begin{table}[htbp]
-	\centering
-	\caption{tabu环境测试表格---X列模式}\label{tab:tabu_test_2}
-    \begin{tabu} to 0.6\linewidth{X[1]X[2]X[2]}
-    \toprule
-    \textbf{行星}     & \textbf{赤道半径}km & \textbf{公转周期}d \\
-    \midrule
-    水星     & 2.439  & 87.9 \\
-    金星     & 6.1    & 224.682 \\
-    地球     & 6378.14 & 365.24 \\
-    \bottomrule
-    \end{tabu}%
-\end{table}
-
-特别需要注意的是，longtabu是基于longtable宏包开发的，所以在zjuthesis.cls文件中已经插入了longtable宏包。longtable环境的所有功能都可以在longtabu中使用，如\textbackslash endhead，\textbackslash endfirsthead，\textbackslash endfoot，\textbackslash endlastfoot，和\textbackslash caption等。具体用法请参见longtable和tabu宏包的相应文档。
-\begin{longtabu}{lccc}
-\caption{材料弹性模量及泊松比}\label{tab:tabu_test_3}\\
-\toprule
-名  称   & 弹性模量E/Gpa & 切变模量G/Gpa & 泊松比$\mu$ \\
-\midrule%
-\endfirsthead
-\caption{材料弹性模量及泊松比（续）}\\
-\toprule
-名  称   & 弹性模量E/Gpa & 切变模量G/Gpa & 泊松比$\mu$ \\
-\midrule%
-\endhead
-\bottomrule%
-\endfoot
-镍铬钢、合金钢 & 206    & 79.38  & 0.3 \\
-碳　钢    &  196～206 & 79     & 0.3 \\
-\end{longtabu}%
-
-\subsection{子图}
-
-如\autoref{fig:subfig_test1}是有两张子图的模式，对子图进行交叉引用，如\autoref{subfig:1a}和\autoref{subfig:1b}。
-
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter2.png}
-		\caption{书籍排版与普通排版}\label{subfig:1a}
-	\end{subfigure}
-	\quad
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter3.png}
-		\caption{\TeX 的控制系列}\label{subfig:1b}
-	\end{subfigure}
-	\caption{子图模式测试1:2张图}\label{fig:subfig_test1}
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter4.png}
-		\caption{字体}\label{subfig:2a}
-	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter5.png}
-		\caption{编组}\label{subfig:2b}
-	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter6.png}
-		\caption{运行\TeX}\label{subfig:2c}
-	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
-		\centering
-		\includegraphics[width = \textwidth]{Chapter7.png}
-		\caption{\TeX 工作原理}\label{subfig:2d}
-	\end{subfigure}
-	\caption{子图模式测试2:4张图}\label{fig:subfig_test2}
-\end{figure}
-
-\subsection{数学模式测试}
-数学模式测试，主要测试数学字体，编号和交叉引用。这里首先推荐使用\texttt{align}和\texttt{align*}数学模式环境，大多数行间数学模式只需要用这个环境就可以了。
-
-交叉引用测试，如交引用命令{\ttfamily \textbackslash eqref}和\texttt{\textbackslash ref}命令的区别。如公式\eqref{eq:test1}，公式\ref{eq:test1}显示，\texttt{\textbackslash eqref}命令比\texttt{\textbackslash ref}命令的应用结果多了个括号。
-
-如公式\eqref{eq:test3}是单行公式环境，查看公式\eqref{eq:test3}和\eqref{eq:test1}之间的区别，好像在单行公式中没什么区别。
-\begin{align}\label{eq:test3}
-	f(x) = 2(x + 1)^{2} - 1
-\end{align}
-
-\texttt{align}公式环境，用在单行中。
-\begin{align}\label{eq:test1}
-	f(x) = 2(x + 1)^{2} - 1
-\end{align}
-
-\begin{align*}
-	f(x) = 2(x + 1)^{2} - 1
-\end{align*}
-在这里，中间插入一些文字以形成段落，查看行间公式与上下文之间的间隙。下一个公式\eqref{eq:test2}是一个公式组，它在“=”位置对齐。
-\begin{align}\label{eq:test2}
-	f(x) & = 2(x + 1)^{2} - 1\\
-		 & = 2(x^{2} + 2x +1)-1\\
-		 & = 2x^{2} + 4x + 1
-\end{align}
-
-
-\section{关于引用}
-图表的引用通过{\ttfamily \textbackslash autoref} 命令即可，使用ST LaTeXTools 插件还能自动补全。如果要修改前缀，那么就用{\ttfamily \textbackslash recnewcommand \textbackslash figureautorefname\{好图\}}即可，详见hyperref宏包说明。
