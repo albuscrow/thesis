@@ -4,6 +4,8 @@
 % !TEX program = xelatex
 \documentclass[doctor,twoside,nocpsupervisor]{zjuthesis}
 \usepackage{color}
+\usepackage{multirow}
+\usepackage[scientific-notation=true,round-precision=4,round-mode=figures]{siunitx}
 
 % 插图路径设置，图片放在figures 文件夹下。一般来说论文的插图比较多，通常按章节存
 % 放，因此可以在以下命令中在按章节添加存放图片的文件夹路径。如以下这个路径中 ./
@@ -17,6 +19,7 @@
 	{./figures/clip/}%
 	{./figures/gpu/}%
 	{./figures/mobile/}%
+	{./figures/result/}%
 }
 
 % 论文中文标题
@@ -78,9 +81,10 @@
 \include{contents/sffd}
 \include{contents/clip}
 \include{contents/gpu}
-\include{contents/mobile}
-\include{contents/structure}
-\include{contents/specification}
+%\include{contents/mobile}
+\include{contents/result}
+%\include{contents/structure}
+%\include{contents/specification}
 \backmatter
 \bibliography{reference_data_base/references}
 % \nocite{*} % to show the entire references, annotate it if need.
