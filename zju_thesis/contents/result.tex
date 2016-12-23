@@ -201,7 +201,7 @@
 	\caption{犹他茶壶变形结果}\label{fig:teapot_result}
 \end{figure}
 
-\autoref{subfig:cube1}是立方体模型通过精确自由变形得到的结果，该结果是精确的，所以光滑自由变形和本文方法得到的结果（如图\autoref{subfig:cube2}与\autoref{subfig:cube3}所示）都与精确自由变形得到的结果进行比较，以得到光滑自由变形和本文方法的变形误差，结果如\autoref{tab:error_cube}所示。其中，几何误差定义为对应点的欧氏距离，法向误差定义为对应点法向所成夹角的角度。从\autoref{tab:error_cube}中可以看出，本文方法的几何误差与法向误差均小于光滑自由变形，主要原因是本文方法选取的$l$比较小，产生的子三角形要比光滑自由变形小很多。\autoref{fig:cube_error}中是上述误差的可视化结果。
+\autoref{subfig:cube1}是立方体模型通过精确自由变形得到的结果，该结果是精确的，所以光滑自由变形和本文方法得到的结果（如图\autoref{subfig:cube2}与\autoref{subfig:cube3}所示）都与精确自由变形得到的结果进行比较，以得到光滑自由变形和本文方法的变形误差，结果如\autoref{tab:error_cube}所示。其中，几何误差定义为对应点的欧氏距离，法向误差定义为对应点法向所成夹角的角度。从\autoref{tab:error_cube}中可以看出，本文方法的几何误差与法向误差均小于光滑自由变形，主要原因是本文方法选取的$l$比较小，产生的子三角形要比光滑自由变形小很多。\autoref{fig:cube_error0}、\autoref{fig:cube_error1}中是上述误差的可视化结果。
 
 \begin{table}[htbp]
     \centering
@@ -218,32 +218,34 @@
 
 \begin{figure}[htbp]
 	\centering
-	\begin{subfigure}[b]{.4\textwidth}
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{cube4.png}
 		\caption{本文方法几何误差图}\label{subfig:cube4}
-	\end{subfigure}
-	\quad
-	\begin{subfigure}[b]{.4\textwidth}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{cube6.png}
 		\caption{光滑自由变形几何误差图}\label{subfig:cube6}
 	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
+	\caption{立方体几何误差}\label{fig:cube_error0}
+\end{figure}
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{cube5.png}
 		\caption{本文方法法向误差图}\label{subfig:cube5}
-	\end{subfigure}
-	\quad
-	\begin{subfigure}[b]{.4\textwidth}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{cube7.png}
 		\caption{光滑自由变形法向误差图}\label{subfig:cube7}
 	\end{subfigure}
-	\caption{立方体误差图}\label{fig:cube_error}
+	\caption{立方体法向误差}\label{fig:cube_error1}
 \end{figure}
 
-对于犹他茶壶，对比结果如\autoref{tab:error_utah}所示。我们同样给出了上述误差的可视化结果，如\autoref{fig:teapot_error}所示。犹他茶壶经过Casteljau细分算法得到的三角形本身比较小，所以本文方法中较小的$l$没有优势，所以两种结果的几何误差和法向误差较为接近。同时从\autoref{subfig:teapot5}和\autoref{subfig:teapot7}可以看出，曲率较大的地方法向误差会比较大。
+对于犹他茶壶，对比结果如\autoref{tab:error_utah}所示。我们同样给出了上述误差的可视化结果，如\autoref{fig:teapot_error0}、\autoref{fig:teapot_error1}所示。犹他茶壶经过Casteljau细分算法得到的三角形本身比较小，所以本文方法中较小的$l$没有优势，所以两种结果的几何误差和法向误差较为接近。同时从\autoref{subfig:teapot5}和\autoref{subfig:teapot7}可以看出，无论上本文方法还是光滑自由变形，曲率较大的地方法向误差会比较大。
 
 \begin{table}[htbp]
     \centering
@@ -260,27 +262,31 @@
 
 \begin{figure}[htbp]
 	\centering
-	\begin{subfigure}[b]{.4\textwidth}
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{teapot4.png}
 		\caption{本文方法几何误差图}\label{subfig:teapot4}
-	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{teapot6.png}
 		\caption{光滑自由变形几何误差图}\label{subfig:teapot6}
 	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
+	\caption{犹他茶壶几何误差}\label{fig:teapot_error0}
+\end{figure}
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{teapot5.png}
 		\caption{本文方法法向误差图}\label{subfig:teapot5}
-	\end{subfigure}
-	\begin{subfigure}[b]{.4\textwidth}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.45\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{teapot7.png}
 		\caption{光滑自由变形法向误差图}\label{subfig:teapot7}
 	\end{subfigure}
-	\caption{犹他茶壶误差图}\label{fig:teapot_error}
+	\caption{犹他茶壶法向误差}\label{fig:teapot_error1}
 \end{figure}
 
 \subsection{移动平台的运行效率}
