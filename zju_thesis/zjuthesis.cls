@@ -305,14 +305,16 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \renewcommand\maketitle{
 % \@mainmatterfalse
 	\ZJUmakecover
+	\ZJUenmakecover
 	\ZJUmakeCNtitlepage
 	% 判断是否显示英文题名页，博士显示，硕士不显示。
 	\if@doctor
-		\ZJUmakeENtitlepage
+	    \ZJUmakeENtitlepage
 	\fi
 	\makeOSpage
 }
-% 封面
+
+% 中文封面
 \newcommand\ZJUmakecover{
 	\cleardoublepage
 	\pdfbookmark[0]{封面}{anchor_cover}
@@ -325,19 +327,19 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 	学\ZJUspace 号：\ZJUunderline[60pt]{\ZJU@studentnumber} \par
 	\vspace{10mm}
 	\begin{center}
-		\includegraphics[width=60mm]{./logo/ZJDX.pdf}\par
-		\vspace{4mm}
+		\includegraphics[width=80mm]{./logo/ZJDX.pdf}\par
+		\vspace{2cm}
 		{
 			\if@doctor
-				{\songti \zihao{-1}博士学位论文}
+				{\songti \zihao{1}博\ZJU@spaceChar 士\ZJU@spaceChar 学\ZJU@spaceChar 位\ZJU@spaceChar 论\ZJU@spaceChar 文}
 			\else
-				{\songti \zihao{-1}硕士学位论文}
+				{\songti \zihao{1}硕\ZJU@spaceChar 士\ZJU@spaceChar 学\ZJU@spaceChar 位\ZJU@spaceChar 论\ZJU@spaceChar 文}
 			\fi
 		}\par
-		\vspace{6mm}
-		\includegraphics[width=22.8mm]{./logo/QSY.pdf}
+		\vspace{1.5cm}
+		\includegraphics[width=30mm]{./logo/QSY.pdf}
 	\end{center}
-	\vspace{6mm}
+	\vspace{1cm}
 	% 新建一个长度寄存器，存放封面标题下划线宽度值
 	\newlength{\titleulwidth@cover}
 	\addtolength{\titleulwidth@cover}{260pt}
@@ -348,7 +350,69 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 				\zihao{-2} \fangsong\bfseries
 				\uline{\ZJU@title\hfill}
 			\end{minipage}} \\%[20pt]
-			\rule{0pt}{10mm}英文论文题目: &
+		\end{tabular}
+		\vfill
+		\begin{tabular}{>{\zihao{4}\songti}r>{\zihao{4}\fangsong}l}
+			申请人姓名: & \ZJUunderline[200pt]{\ZJU@author} \\[3mm]
+			指导教师: & \ZJUunderline[200pt]{\ZJU@supervisor} \\[3mm]
+			\if@cpsupervisor
+				合作导师: & \ZJUunderline[200pt]{\ZJU@cpsupervisor} \\[3mm]
+			\fi
+			专业名称: & \ZJUunderline[200pt]{\ZJU@major} \\[3mm]
+			研究方向: & \ZJUunderline[200pt]{\ZJU@research} \\[3mm]
+			所在学院: & \ZJUunderline[200pt]{\ZJU@institute}
+		\end{tabular}
+	\end{center}
+	\vskip 17mm
+	\begin{center}
+		{\zihao{-3}\songti\bfseries 论文提交日期\ZJUunderline[150pt]{%
+		\ZJU@submitdate}}
+	\end{center}
+	%清空变量节省空间
+	%\global\let\ZJU@classification\@empty
+	%\global\let\ZJU@serialnumber\@empty
+	%\global\let\ZJU@secretlevel\@empty
+	%\global\let\ZJU@studentnumber\@empty
+	%\global\let\ZJU@author\@empty
+	%\global\let\ZJU@supervisor\@empty
+	%\global\let\ZJU@cpsupervisor\@empty
+	%\global\let\ZJU@major\@empty
+	%\global\let\ZJU@research\@empty
+	%\global\let\ZJU@institute\@empty
+	%\global\let\ZJU@submitdate\@empty
+	%\global\let\classification\relax
+	%\global\let\serialnumber\relax
+	%\global\let\secretlevel\relax
+	%\global\let\studentnumber\relax
+	%\global\let\author\relax
+	%\global\let\supervisor\relax
+	%\global\let\cpsupervisor\relax
+	%\global\let\major\relax
+	%\global\let\research\relax
+	%\global\let\institute\relax
+	%\global\let\submitdate\relax
+}
+
+% 英文封面
+\newcommand\ZJUenmakecover{
+	\cleardoublepage
+	\pdfbookmark[0]{封面}{anchor_cover}
+	\thispagestyle{ZJU@empty}
+	\vspace{3cm}
+	\begin{center}
+		\vspace{4mm}
+		{\songti \zihao{-1}A Dissertation Submitted to Zhejiang \\ University for the Degree of \\ Master of Engineering}
+		\vspace{6mm}
+        \par
+		\includegraphics[width=22.8mm]{./logo/QSY.pdf}
+	\end{center}
+	\vspace{6mm}
+	% 新建一个长度寄存器，存放封面标题下划线宽度值
+	%\newlength{\titleulwidth@cover}
+	\addtolength{\titleulwidth@cover}{260pt}
+	\begin{center}
+		\begin{tabular}[t]{>{\zihao{3}\bfseries}rl}
+			\rule{0pt}{10mm}TITLE: &
 			{\begin{minipage}[t][60pt][t]{\titleulwidth@cover}
 				\newlength{\etitlelength}
 				\fontsize{16}{23}\bfseries
@@ -375,45 +439,45 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 		\end{tabular}
 		\vfill
 		\begin{tabular}{>{\zihao{4}\songti}r>{\zihao{4}\fangsong}l}
-			申请人姓名: & \ZJUunderline[200pt]{\ZJU@author} \\[3mm]
-			指导教师: & \ZJUunderline[200pt]{\ZJU@supervisor} \\[3mm]
+			Author: & \ZJUunderline[200pt]{\ZJU@author} \\[3mm]
+			Supervisor: & \ZJUunderline[200pt]{\ZJU@supervisor} \\[3mm]
 			\if@cpsupervisor
-				合作导师: & \ZJUunderline[200pt]{\ZJU@cpsupervisor} \\[3mm]
+				Cpsupervisor: & \ZJUunderline[200pt]{\ZJU@cpsupervisor} \\[3mm]
 			\fi
-			专业名称: & \ZJUunderline[200pt]{\ZJU@major} \\[3mm]
-			研究方向: & \ZJUunderline[200pt]{\ZJU@research} \\[3mm]
-			所在学院: & \ZJUunderline[200pt]{\ZJU@institute}
+			subject: & \ZJUunderline[200pt]{\ZJU@major} \\[3mm]
+			college: & \ZJUunderline[200pt]{\ZJU@institute}
 		\end{tabular}
 	\end{center}
 	\vskip 17mm
 	\begin{center}
-		{\zihao{-3}\songti\bfseries 论文提交日期\ZJUunderline[150pt]{%
+		{\zihao{-3}\songti\bfseries Submitted Data\ZJUunderline[150pt]{%
 		\ZJU@submitdate}}
 	\end{center}
 	%清空变量节省空间
-	\global\let\ZJU@classification\@empty
-	\global\let\ZJU@serialnumber\@empty
-	\global\let\ZJU@secretlevel\@empty
-	\global\let\ZJU@studentnumber\@empty
-	\global\let\ZJU@author\@empty
-	\global\let\ZJU@supervisor\@empty
-	\global\let\ZJU@cpsupervisor\@empty
-	\global\let\ZJU@major\@empty
-	\global\let\ZJU@research\@empty
-	\global\let\ZJU@institute\@empty
-	\global\let\ZJU@submitdate\@empty
-	\global\let\classification\relax
-	\global\let\serialnumber\relax
-	\global\let\secretlevel\relax
-	\global\let\studentnumber\relax
-	\global\let\author\relax
-	\global\let\supervisor\relax
-	\global\let\cpsupervisor\relax
-	\global\let\major\relax
-	\global\let\research\relax
-	\global\let\institute\relax
-	\global\let\submitdate\relax
+    \global\let\ZJU@classification\@empty
+    \global\let\ZJU@serialnumber\@empty
+    \global\let\ZJU@secretlevel\@empty
+    \global\let\ZJU@studentnumber\@empty
+    \global\let\ZJU@author\@empty
+    \global\let\ZJU@supervisor\@empty
+    \global\let\ZJU@cpsupervisor\@empty
+    \global\let\ZJU@major\@empty
+    \global\let\ZJU@research\@empty
+    \global\let\ZJU@institute\@empty
+    \global\let\ZJU@submitdate\@empty
+    \global\let\classification\relax
+    \global\let\serialnumber\relax
+    \global\let\secretlevel\relax
+    \global\let\studentnumber\relax
+    \global\let\author\relax
+    \global\let\supervisor\relax
+    \global\let\cpsupervisor\relax
+    \global\let\major\relax
+    \global\let\research\relax
+    \global\let\institute\relax
+    \global\let\submitdate\relax
 }
+
 % 中文题名页
 \newcommand\ZJUmakeCNtitlepage{
 	\cleardoublepage
@@ -594,23 +658,23 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 	\vspace{8mm}
 	\begin{center}
 		\begin{tabular}{>{\zihao{4}}r>{\zihao{4}}l}
-		External Reviewers: & \ZJUunderline[260pt]{\ZJU@enreviewerA}\\[2mm]
-							& \ZJUunderline[260pt]{\ZJU@enreviewerB}\\[2mm]
-							& \ZJUunderline[260pt]{\ZJU@enreviewerC}\\[8mm]
+        External Reviewers: & \ZJUunderline[260pt]{\ZJU@enreviewerA}\\[2mm]
+                            & \ZJUunderline[260pt]{\ZJU@enreviewerB}\\[2mm]
+                            & \ZJUunderline[260pt]{\ZJU@enreviewerC}\\[8mm]
 
-		%External Reviewers: & \ZJUunderline[260pt]{\ZJU@enreviewerA}\\[2mm]
-							%& \ZJUunderline[260pt]{\ZJU@enreviewerB}\\[2mm]
-							%& \ZJUunderline[260pt]{\ZJU@enreviewerC}\\[2mm]
-							%& \ZJUunderline[260pt]{\ZJU@enreviewerD}\\[2mm]
-							%& \ZJUunderline[260pt]{\ZJU@enreviewerE}\\[8mm]
+        %External Reviewers: & \ZJUunderline[260pt]{\ZJU@enreviewerA}\\[2mm]
+                            %& \ZJUunderline[260pt]{\ZJU@enreviewerB}\\[2mm]
+                            %& \ZJUunderline[260pt]{\ZJU@enreviewerC}\\[2mm]
+                            %& \ZJUunderline[260pt]{\ZJU@enreviewerD}\\[2mm]
+                            %& \ZJUunderline[260pt]{\ZJU@enreviewerE}\\[8mm]
 		\multicolumn{2}{l}{\zihao{4} Examining Committee Chairperson:}\\[2mm]
 							& \ZJUunderline[260pt]{\ZJU@enchairperson}\\[2mm]
 		\multicolumn{2}{l}{\zihao{4} Examining Committee Members:}\\[2mm]
 							&\ZJUunderline[260pt]{\ZJU@encommissionerA}\\[2mm]
 							&\ZJUunderline[260pt]{\ZJU@encommissionerB}\\[2mm]
 							&\ZJUunderline[260pt]{\ZJU@encommissionerC}%\\[2mm]
-							%&\ZJUunderline[260pt]{\ZJU@encommissionerD}\\[2mm]
-							%&\ZJUunderline[260pt]{\ZJU@encommissionerE}
+                            %&\ZJUunderline[260pt]{\ZJU@encommissionerD}\\[2mm]
+                            %&\ZJUunderline[260pt]{\ZJU@encommissionerE}
 		\end{tabular}
 	\end{center}
 %	\vspace{8mm}
@@ -717,7 +781,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \renewcommand\chapter{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
 	\phantomsection			% hyperref宏包的命令，超链接用。
-	\thispagestyle{ZJU@plain}%
+	\thispagestyle{ZJU@headings}%
 	\global\@topnum\z@%
 	\@afterindenttrue%
 	\secdef\@chapter\@schapter}
@@ -767,7 +831,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \newcommand\npchapter{
 	\if@openright\cleardoublepage\else\clearpage\fi%
 	\phantomsection			% hyperref宏包的命令，超链接用。
-	\thispagestyle{ZJU@plain}%
+	\thispagestyle{ZJU@headings}%
 	\global\@topnum\z@%
 	\@afterindenttrue%
 	\secdef\@npchapter\@schapter}
@@ -843,8 +907,8 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 		\gdef\thechapter{\@Alph\c@chapter}
 	\fi}
 
-%---------- 目录（目次） ----------
-\renewcommand{\contentsname}{目\texorpdfstring{\ZJUspace}{}次}				% 重命名章节目录名。
+%---------- 目录（目录） ----------
+\renewcommand{\contentsname}{目\texorpdfstring{\ZJUspace}{}录}				% 重命名章节目录名。
 \renewcommand{\listfigurename}{插\texorpdfstring{\ZJUspace}{}图}			% 重命名插图目录名。
 \renewcommand{\listtablename}{表\texorpdfstring{\ZJUspace}{}格}				% 重命名表目录名。
 
@@ -865,7 +929,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 章节目录
 \renewcommand\tableofcontents{%
 	% 使用\npchapter，将标题插入目录，但是不产生页码和中间点线。
-	\npchapter{\contentsname}
+	\chapter*{\contentsname}
 	\markboth{\contentsname}{}
 	\@starttoc{toc}}
 
@@ -926,7 +990,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 图目录
 \renewcommand\listoffigures{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
-	\chapter{\listfigurename}
+	\chapter*{\listfigurename}
 	\@starttoc{lof}}
 
 \renewcommand*\l@figure{\@dottedtocline{1}{0\p@}{2.3em}}
@@ -934,7 +998,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 表目录
 \renewcommand\listoftables{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
-	\chapter{\listtablename}
+	\chapter*{\listtablename}
 	\@starttoc{lot}}
 
 \let\l@table\l@figure
@@ -1129,7 +1193,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 % ---------- 缩写、符号清单、术语表 ----------
 % 以下尺寸详细说明见P33/112
 \newenvironment*{denotation}[1][2.5cm]{
-\chapter{缩写、符号清单、术语表}
+\chapter*{缩写、符号清单、术语表}
 \noindent
 \begin{list}{}{
 	\renewcommand\makelabel[1]{##1\hfil}

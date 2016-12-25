@@ -2,7 +2,9 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX builder = LATEXMK
 % !TEX program = xelatex
-\documentclass[doctor,twoside,nocpsupervisor]{zjuthesis}
+\documentclass[oneside,nocpsupervisor]{zjuthesis}
+
+%\documentclass[doctor,twoside,nocpsupervisor]{zjuthesis}
 \usepackage{color}
 \usepackage{multirow}
 \usepackage[scientific-notation=true,round-precision=4,round-mode=figures]{siunitx}
@@ -65,7 +67,6 @@
 % \ZJUmakeCNtitlepage
 % \ZJUmakeENtitlepage
 \frontmatter
-\include{contents/thanks}
 \include{contents/abstract_chinese}
 \include{contents/abstract_english}
 % 正文目录：
@@ -91,4 +92,6 @@
 \appendix
 \include{contents/appendixA}
 \include{contents/appendixB}
+\include{contents/thanks}
+%TODO 作者简介
 \end{document}
