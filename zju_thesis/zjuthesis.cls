@@ -16,6 +16,8 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \LoadClass[cs4size,fancyhdr,fntef,openright,cap]{ctexbook}
 
 %---------- 加载宏包 ----------
+% add by ac
+\usepackage{setspace}
 % 数学公式
 \RequirePackage{amsmath,amssymb}
 % 公式中的粗体
@@ -306,10 +308,10 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 % \@mainmatterfalse
 	\ZJUmakecover
 	\ZJUenmakecover
-	\ZJUmakeCNtitlepage
+	%\ZJUmakeCNtitlepage
 	% 判断是否显示英文题名页，博士显示，硕士不显示。
 	\if@doctor
-	    \ZJUmakeENtitlepage
+	%    \ZJUmakeENtitlepage
 	\fi
 	\makeOSpage
 }
@@ -337,7 +339,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 			\fi
 		}\par
 		\vspace{1.5cm}
-		\includegraphics[width=30mm]{./logo/QSY.pdf}
+		\includegraphics[width=35mm]{./logo/QSY.pdf}
 	\end{center}
 	\vspace{1cm}
 	% 新建一个长度寄存器，存放封面标题下划线宽度值
@@ -398,13 +400,16 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 	\cleardoublepage
 	\pdfbookmark[0]{封面}{anchor_cover}
 	\thispagestyle{ZJU@empty}
-	\vspace{3cm}
+	\vspace*{3cm}
 	\begin{center}
-		\vspace{4mm}
-		{\songti \zihao{-1}A Dissertation Submitted to Zhejiang \\ University for the Degree of \\ Master of Engineering}
+        \begin{spacing}{1.1}
+		\zihao{-1}A Dissertation Submitted to Zhejiang \\
+        University for the Degree of \\
+        Master of Engineering \\
+        \end{spacing}
 		\vspace{6mm}
         \par
-		\includegraphics[width=22.8mm]{./logo/QSY.pdf}
+		\includegraphics[width=35mm]{./logo/QSY.pdf}
 	\end{center}
 	\vspace{6mm}
 	% 新建一个长度寄存器，存放封面标题下划线宽度值
@@ -544,7 +549,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 		\fi\fi\fi
 	\end{center}
 	\begin{center}
-		\includegraphics[width=22.8mm]{./logo/QSY.pdf}
+		\includegraphics[width=35mm]{./logo/QSY.pdf}
 	\end{center}
 	\vspace{6mm}
 	\begin{center}
@@ -646,7 +651,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 		\end{minipage}
 	\end{center}
 	\begin{center}
-		\includegraphics[width=22.8mm]{./logo/QSY.pdf}
+		\includegraphics[width=35mm]{./logo/QSY.pdf}
 	\end{center}
 	\vspace{6mm}
 	\begin{center}
