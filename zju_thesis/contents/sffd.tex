@@ -71,27 +71,46 @@
 
 
 \section{变形}
-变形过程实际上就是改变变形空间，并将变形“传递”到待变形模型的过程。通过前方所述的步骤，我们已经将采样点嵌入到B样条体中。算法就是通过这些采样点将变形“传递”到待变形模型中的。当用户编辑B样条体控制顶点的位置后，算法先将采样点的参数坐标和控制顶点位置代入\autoref{equ:Ruvw}，就可以求得采样点新的位置。再以这些采样点新的位置为输入，通过带约束的拟合方法，求出作为变形结果的三角贝赛尔曲面的控制顶点。\autoref{fig:sffd}展示了这一过程。用户先将控制顶点由\autoref{subfig:sffd_0}所示位置移动到\autoref{subfig:sffd_1}所示的位置。模型再相应的由\autoref{subfig:sffd_0}变化到\autoref{subfig:sffd_1}。
+\subsection{几何变形}
+变形过程实际上就是改变变形空间，并将变形“传递”到待变形模型的过程。通过前方所述的步骤，我们已经将采样点嵌入到B样条体中。算法就是通过这些采样点将变形“传递”到待变形模型中的。当用户编辑B样条体控制顶点的位置后，算法先将采样点的参数坐标和控制顶点位置代入\autoref{equ:Ruvw}，就可以求得采样点新的位置。再以这些采样点新的位置为输入，通过带约束的拟合方法，求出作为变形结果的三角贝赛尔曲面的控制顶点。\autoref{subfig:sffd_0}是原模型，\autoref{subfig:sffd_1}是将上述变形得到的三角贝赛尔曲面片细分成三角形后进行绘制的结果，绘制时所用的法向由三角形叉乘得到。
 
 \begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{.4\textwidth}
 		\centering
-		\includegraphics[width = \textwidth]{sffd1.png}
-		\caption{嵌入}\label{subfig:sffd_0}
+		\includegraphics[width = \textwidth]{sffd_0.png}
+		\caption{原模型}\label{subfig:sffd_0}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[b]{.4\textwidth}
 		\centering
-		\includegraphics[width = \textwidth]{sffd0.png}
-		\caption{变形}\label{subfig:sffd_1}
+		\includegraphics[width = \textwidth]{sffd_1.png}
+		\caption{几何变形结果}\label{subfig:sffd_1}
 	\end{subfigure}
     \caption{光滑自由变形示意图}\label{fig:sffd}
 \end{figure}
 
+\subsection{法向变形}
+因为上述过程并未考虑模型的法向信息，可以很明显的看出\label{subfig:sffd_1}中的结果并不光滑。为了改进这一点，光滑自由变形将法向也纳入了变形构架中。首先我们通过重心坐标插值求得采样点的法向，然后通过Gain\cite{gain1999}的方法计算出采样点的法向量变形以后的位置。接着，用与几何变形中相同的方法，由采样点的法向量，我们就可以用三次贝赛尔曲面片拟合出变形后的子三角形法向量场。在细分阶段我们同时细分法向量场，这样的我们就有了在光滑边两侧视觉上$G^1$连续的几何和$G0$连续的法向量场；在尖锐边两侧$G^0$连续的几何和$G^(-1)$连续的法向量场。\autoref{subfig:sffd_smooth_0}展示了加入法向信息后的变形结果。
 
-\section{}
-为了得到视觉上更加细腻的变形结果，算法还将根据法向信息对控制顶点进行微调。最终输出光滑并保持尖锐特征的结果。
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{sffd_smooth_0.png}
+		\caption{变形结果}\label{subfig:sffd_smooth_0}
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{sffd_smooth_1.png}
+		\caption{变形结果}\label{subfig:sffd_smooth_1}
+	\end{subfigure}
+    \caption{光滑自由变形示意图}\label{fig:sffd}
+\end{figure}
+
+\section{几何微调}
+\autoref{subfig:sffd_smooth_0}中的结果，尽管着色结果很光滑，但是几何方面仍然存在走样。如\autoref{subfig:sffd_smooth_0}中的框出来的部分，红色部分和绿色部分分别体现了尖锐边界和侧影轮廓线的走样。为了解决这些问题，得到视觉上更加细腻的变形结果，算法还将根据法向信息对表示几何的三角贝赛尔曲面片的控制顶点进行了微调。最终输出光滑并保持尖锐特征的结果，\autoref{subfig:sffd_smooth_1}所示。
 
 以上就是光滑自由变形的大致步骤，下面将介绍本文算法在此基础上进行的改进。
 
