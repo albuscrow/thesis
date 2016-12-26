@@ -112,7 +112,7 @@
 \section{几何微调}
 \autoref{subfig:sffd_smooth_0}中的结果，尽管着色结果很光滑，但是几何方面仍然存在走样。如\autoref{subfig:sffd_smooth_0}中的框出来的部分，红色部分和绿色部分分别体现了尖锐边界和侧影轮廓线的走样。为了解决这些问题，得到视觉上更加细腻的变形结果，算法还将根据法向信息对表示几何的三角贝赛尔曲面片的控制顶点进行了微调。最终输出光滑并保持尖锐特征的结果，\autoref{subfig:sffd_smooth_1}所示。
 
-以上就是光滑自由变形的大致步骤，其算法总结如下：
+以上就是光滑自由变形的大致步骤，其算法流程如\autoref{fig:algorithm_sffd}所示，下文将介绍本文算法在此基础上进行的改进。
 
 
 \tikzstyle{GPU} = [rectangle, draw, fill=blue!15, 
@@ -120,16 +120,15 @@
 
 \tikzstyle{CPU} = [rectangle, draw, fill=red!15, 
     text width=15em, text centered, rounded corners, minimum height=3em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
-    minimum height=2em]
+\tikzstyle{line} = [draw, thick, ->, >= stealth]
+
 \begin{figure}
 	\centering
     \begin{tikzpicture}[node distance = 2cm, auto]
         % Place nodes
         \node [CPU] (read) {输入多边形网格模型};
         \node [CPU, below of=read] (initspace) {初始化B样条空间，并将模型嵌入其中};
-        \node [GPU, below of=initspace] (split) {根据结点盒切割多边形并三角化切割结果};
+        \node [CPU, below of=initspace] (split) {根据结点盒切割多边形并三角化切割结果};
         \node [GPU, below of=split] (pntriangle) {求子三角面片的PN-Triangle，用以调整变形结果};
         \node [GPU, below of=pntriangle] (sample) {根据控制顶点，计算采样点的位置与法向};
         \node [GPU, below of=sample] (deformation) {用带约束的拟合的方法，计算出三角贝赛尔曲面片和法向量场的控制顶点};
@@ -148,9 +147,8 @@
         \path [line] (tess) -| (edit);
         \path [line] (edit) |- (sample);
     \end{tikzpicture}
-    \caption{本文算法流程图}\label{fig:algorithm}
+    \caption{本文算法流程图}\label{fig:algorithm_sffd}
 \end{figure}
 
-1
-下面将介绍本文算法在此基础上进行的改进。
+
 
