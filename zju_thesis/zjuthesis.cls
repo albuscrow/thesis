@@ -96,7 +96,6 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 
 % 封面
 \renewcommand*\title[1]{\gdef\ZJU@title{#1}}					% 论文中文标题
-\newcommand*\englishtitle[1]{\long\gdef\ZJU@englishtitle{#1}}	% 论文英文标题
 \renewcommand*\author[1]{\gdef\ZJU@author{#1}}					% 作者姓名
 \newcommand*\classification[1]{\gdef\ZJU@classification{#1}}	% 分类号
 \newcommand*\serialnumber[1]{\gdef\ZJU@serialnumber{#1}}		% 单位代码
@@ -108,6 +107,14 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \newcommand*\research[1]{\gdef\ZJU@research{#1}}				% 研究方向
 \newcommand*\institute[1]{\gdef\ZJU@institute{#1}}				% 所在学院
 \newcommand*\submitdate[1]{\gdef\ZJU@submitdate{#1}}			% 提交日期
+
+% 英文封面
+\newcommand*\englishtitle[1]{\long\gdef\ZJU@englishtitle{#1}}	% 论文英文标题
+\newcommand*\enauthor[1]{\gdef\ZJU@enauthor{#1}}					% 作者姓名
+\newcommand*\ensupervisor[1]{\gdef\ZJU@ensupervisor{#1}}			% 指导教师
+\newcommand*\enmajor[1]{\gdef\ZJU@enmajor{#1}}						% 专业名称
+\newcommand*\eninstitute[1]{\gdef\ZJU@eninstitute{#1}}				% 所在学院
+\newcommand*\ensubmitdate[1]{\gdef\ZJU@ensubmitdate{#1}}			% 提交日期
 
 % 中文题名页
 \newcommand*\reviewerA[1]{\gdef\ZJU@reviewerA{#1}}				% 论文评阅人1
@@ -371,28 +378,29 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 		\ZJU@submitdate}}
 	\end{center}
 	%清空变量节省空间
-	%\global\let\ZJU@classification\@empty
-	%\global\let\ZJU@serialnumber\@empty
-	%\global\let\ZJU@secretlevel\@empty
-	%\global\let\ZJU@studentnumber\@empty
-	%\global\let\ZJU@author\@empty
-	%\global\let\ZJU@supervisor\@empty
-	%\global\let\ZJU@cpsupervisor\@empty
-	%\global\let\ZJU@major\@empty
-	%\global\let\ZJU@research\@empty
-	%\global\let\ZJU@institute\@empty
-	%\global\let\ZJU@submitdate\@empty
-	%\global\let\classification\relax
-	%\global\let\serialnumber\relax
-	%\global\let\secretlevel\relax
-	%\global\let\studentnumber\relax
-	%\global\let\author\relax
-	%\global\let\supervisor\relax
-	%\global\let\cpsupervisor\relax
-	%\global\let\major\relax
-	%\global\let\research\relax
-	%\global\let\institute\relax
-	%\global\let\submitdate\relax
+	\global\let\ZJU@classification\@empty
+	\global\let\ZJU@serialnumber\@empty
+	\global\let\ZJU@secretlevel\@empty
+	\global\let\ZJU@studentnumber\@empty
+	\global\let\ZJU@author\@empty
+	\global\let\ZJU@supervisor\@empty
+	\global\let\ZJU@cpsupervisor\@empty
+	\global\let\ZJU@major\@empty
+	\global\let\ZJU@research\@empty
+	\global\let\ZJU@institute\@empty
+	\global\let\ZJU@submitdate\@empty
+
+	\global\let\classification\relax
+	\global\let\serialnumber\relax
+	\global\let\secretlevel\relax
+	\global\let\studentnumber\relax
+	\global\let\author\relax
+	\global\let\supervisor\relax
+	\global\let\cpsupervisor\relax
+	\global\let\major\relax
+	\global\let\research\relax
+	\global\let\institute\relax
+	\global\let\submitdate\relax
 }
 
 % 英文封面
@@ -407,80 +415,63 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
         University for the Degree of \\
         Master of Engineering \\
         \end{spacing}
-		\vspace{6mm}
+		\vspace{1.5cm}
         \par
 		\includegraphics[width=35mm]{./logo/QSY.pdf}
 	\end{center}
-	\vspace{6mm}
+	\vspace*{1.8cm}
 	% 新建一个长度寄存器，存放封面标题下划线宽度值
-	%\newlength{\titleulwidth@cover}
-	\addtolength{\titleulwidth@cover}{260pt}
+	\newlength{\entitleulwidth@cover}
+	\addtolength{\entitleulwidth@cover}{300pt}
 	\begin{center}
 		\begin{tabular}[t]{>{\zihao{3}\bfseries}rl}
 			\rule{0pt}{10mm}TITLE: &
-			{\begin{minipage}[t][60pt][t]{\titleulwidth@cover}
+			{\begin{minipage}[t][60pt][t]{\entitleulwidth@cover}
 				\newlength{\etitlelength}
 				\fontsize{16}{23}\bfseries
 				\settowidth{\etitlelength}{\ZJU@englishtitle}
-% 使封面英文标题下划线数量能够适应因英文标题内容长短变化而引起的英文标题行数变化
-% 而引起的下划线行数变化，下划线行数就是英文标题行数。目前最大的支持行数为3行，
-% 不过行数可以根据需要扩展，只要符合页面格式的美观即可。不过论文编写规则中提到：
-% 英文标题翻译应简短准确，一般不应超过150个字母，必要时可以加副标题。
 				\ZJU@englishtitle\\*
-				\ifdim\etitlelength<\titleulwidth@cover
-					\raisebox{31pt}[0pt][0pt]{\parbox[t][][t]{\titleulwidth@cover}{
-					\rule{\titleulwidth@cover}{\ULthickness}}}
-				\else\ifdim\etitlelength<2\titleulwidth@cover
-						\raisebox{67pt}[0pt][0pt]{\parbox[t][][t]{\titleulwidth@cover}{
-						\rule{\titleulwidth@cover}{\ULthickness}\\*
-						\rule{\titleulwidth@cover}{\ULthickness}}}
-				\else\ifdim\etitlelength<3\titleulwidth@cover
-						\raisebox{103pt}[0pt][0pt]{\parbox[t][][t]{\titleulwidth@cover}{
-						\rule{\titleulwidth@cover}{\ULthickness}\\*
-						\rule{\titleulwidth@cover}{\ULthickness}\\*
-						\rule{\titleulwidth@cover}{\ULthickness}}}
+				\ifdim\etitlelength<\entitleulwidth@cover
+					\raisebox{31pt}[0pt][0pt]{\parbox[t][][t]{\entitleulwidth@cover}{
+					\rule{\entitleulwidth@cover}{\ULthickness}}}
+				\else\ifdim\etitlelength<2\entitleulwidth@cover
+						\raisebox{67pt}[0pt][0pt]{\parbox[t][][t]{\entitleulwidth@cover}{
+						\rule{\entitleulwidth@cover}{\ULthickness}\\*
+						\rule{\entitleulwidth@cover}{\ULthickness}}}
+				\else\ifdim\etitlelength<3\entitleulwidth@cover
+						\raisebox{103pt}[0pt][0pt]{\parbox[t][][t]{\entitleulwidth@cover}{
+						\rule{\entitleulwidth@cover}{\ULthickness}\\*
+						\rule{\entitleulwidth@cover}{\ULthickness}\\*
+						\rule{\entitleulwidth@cover}{\ULthickness}}}
 				\fi\fi\fi
 			\end{minipage}}\\*
 		\end{tabular}
+
 		\vfill
 		\begin{tabular}{>{\zihao{4}\songti}r>{\zihao{4}\fangsong}l}
-			Author: & \ZJUunderline[200pt]{\ZJU@author} \\[3mm]
-			Supervisor: & \ZJUunderline[200pt]{\ZJU@supervisor} \\[3mm]
-			\if@cpsupervisor
-				Cpsupervisor: & \ZJUunderline[200pt]{\ZJU@cpsupervisor} \\[3mm]
-			\fi
-			subject: & \ZJUunderline[200pt]{\ZJU@major} \\[3mm]
-			college: & \ZJUunderline[200pt]{\ZJU@institute}
+			Author: & \ZJUunderline[200pt]{\ZJU@enauthor} \\[3mm]
+			Supervisor: & \ZJUunderline[200pt]{\ZJU@ensupervisor} \\[3mm]
+			subject: & \ZJUunderline[200pt]{\ZJU@enmajor} \\[3mm]
+			college: & \ZJUunderline[200pt]{\ZJU@eninstitute}
 		\end{tabular}
 	\end{center}
 	\vskip 17mm
 	\begin{center}
 		{\zihao{-3}\songti\bfseries Submitted Data\ZJUunderline[150pt]{%
-		\ZJU@submitdate}}
+		\ZJU@ensubmitdate}}
 	\end{center}
 	%清空变量节省空间
-    \global\let\ZJU@classification\@empty
-    \global\let\ZJU@serialnumber\@empty
-    \global\let\ZJU@secretlevel\@empty
-    \global\let\ZJU@studentnumber\@empty
-    \global\let\ZJU@author\@empty
-    \global\let\ZJU@supervisor\@empty
-    \global\let\ZJU@cpsupervisor\@empty
-    \global\let\ZJU@major\@empty
-    \global\let\ZJU@research\@empty
-    \global\let\ZJU@institute\@empty
-    \global\let\ZJU@submitdate\@empty
-    \global\let\classification\relax
-    \global\let\serialnumber\relax
-    \global\let\secretlevel\relax
-    \global\let\studentnumber\relax
-    \global\let\author\relax
-    \global\let\supervisor\relax
-    \global\let\cpsupervisor\relax
-    \global\let\major\relax
-    \global\let\research\relax
-    \global\let\institute\relax
-    \global\let\submitdate\relax
+    \global\let\ZJU@enauthor\@empty
+    \global\let\ZJU@ensupervisor\@empty
+    \global\let\ZJU@enmajor\@empty
+    \global\let\ZJU@eninstitute\@empty
+    \global\let\ZJU@ensubmitdate\@empty
+
+    \global\let\enauthor\relax
+    \global\let\ensupervisor\relax
+    \global\let\enmajor\relax
+    \global\let\eninstitute\relax
+    \global\let\ensubmitdate\relax
 }
 
 % 中文题名页
