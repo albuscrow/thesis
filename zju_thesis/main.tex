@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,chains,positioning}
 \usepackage[scientific-notation=true,round-precision=4,round-mode=figures]{siunitx}
+\usepackage[justification=centering]{caption}
 
 % 插图路径设置，图片放在figures 文件夹下。一般来说论文的插图比较多，通常按章节存
 % 放，因此可以在以下命令中在按章节添加存放图片的文件夹路径。如以下这个路径中 ./
@@ -87,13 +88,11 @@
 \include{contents/intro}
 
 \include{contents/sffd}
-%\include{contents/clip}
+\include{contents/clip}
 \include{contents/implement}
-%\include{contents/mobile}
-%\include{contents/result}
+\include{contents/mobile}
+\include{contents/result}
 
-%\include{contents/structure}
-%\include{contents/specification}
 \backmatter
 \bibliography{reference_data_base/references}
 \include{contents/thanks}
