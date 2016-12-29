@@ -37,8 +37,11 @@
     \caption{本文算法流程图\\红色框表示在CPU中运行，蓝框表示在GPU中运行}\label{fig:algorithm_ours}
 \end{figure}
 
-\subsection{OpenGL Compute Shader实现}
-CUDA是由英伟达推出的利用GPU进行通用计算的技术。该技术提供了方便易用的API，允许用户利用GPU强大的并行计算能力来加速算法，能得到了学术界和工业界的广泛应用。光滑自由变形\cite{Cui15}基于CUDA实现。大概获得了100多倍的加速。但是CUDA只能的在英伟达的硬件设备上运行，这大大限制了光滑自由变形的通用性，光滑自由变形不仅无法应用在其它的桌面平台的GPU（AMD、Intel核显）中，也无法在移动平台中运行。而后者由于计算资源有限，反而更加依赖GPU加速算法。
+本文以一个三维模型编辑器的形式实现我们的算法。程序整体用Python3.5实现，界面部分借助PyQT5\footnote{PyQT5是Python对QT的一个封装，方便程序员通过Python使用QT的各种功能。}。变形和绘制部分均通过PyOpenGL实现\footnote{与PyQT5类似，PyOpenGL是Python对OpenGL的封装}，其中变形部分采用Compute Shader实现，绘制部分采用Rendering Shader实现。这两者可以访问到相同的内存空间，变形产生的输出可以直接作为绘制的输入，节省了变形与分制之间一次数据拷贝的开销。
+
+
+\section{OpenGL Compute Shader实现}
+CUDA是由英伟达推出的利用GPU进行并行通用计算的技术。该技术提供了方便易用的API，允许用户利用GPU强大的并行计算能力来加速算法，能得到了学术界和工业界的广泛应用。光滑自由变形\cite{Cui15}基于CUDA实现。大概获得了100多倍的加速。但是CUDA只能的在英伟达的硬件设备上运行，这大大限制了光滑自由变形的通用性，光滑自由变形不仅无法应用在其它的桌面平台的GPU（AMD、Intel核显）中，也无法在移动平台中运行。而后者由于计算资源有限，反而更加依赖GPU加速算法。
 
 为了使我们的算法更加通用，我们将原先在光滑自由变形中GPU运算相关的代码从CUDA迁移到了OpenGL Compute Shader。由于OpenGL每次调用图形相关API与GPU通信时都会产生一定的CPU开销，并且将零散的GPU指令集中发送可以提供给GPU更大的优化空间。所以我们将步骤5至步骤8实现在了同一个Compute Shader中，不妨称之为Deform Shader。算法通过步骤9读取用户输入，再由Deform Shader对模型进行变形。这两个过程交替进行，以达到实时编辑模型的目的。
 

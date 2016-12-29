@@ -49,6 +49,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \renewcommand\tableautorefname{表}
 \renewcommand\equationautorefname{公式}
 \renewcommand\sectionautorefname{}
+\renewcommand\subsectionautorefname{}
 
 \AtEndOfClass{
 	\hypersetup{
