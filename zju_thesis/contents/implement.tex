@@ -18,7 +18,7 @@
         \node [GPU, below of=initspace] (pntriangle) {3、求子三角面片的PN-Triangle，用以调整变形结果};
         \node [GPU, below of=pntriangle] (split) {4、用三角形均匀剖分算法分割三角形};
         \node [GPU, below of=split] (sample) {5、根据控制顶点，计算采样点的位置与法向};
-        \node [GPU, below of=sample] (deformation) {6、用带约束的拟合的方法，计算出三角贝赛尔曲面片和法向量场的控制顶点};
+        \node [GPU, below of=sample] (deformation) {6、用带约束的拟合的方法，计算出三角Bézier曲面片和法向量场的控制顶点};
         \node [GPU, below of=deformation] (adjust) {7、用法向信息和PN-Triangle信息调整上一步得到的控制顶点};
         \node [GPU, below of=adjust] (tess) {8、细分变形结果并绘制};
         \node [CPU, right=2em of deformation] (edit) {9、用户编辑控制顶点};
