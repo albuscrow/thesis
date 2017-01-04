@@ -1,8 +1,8 @@
 % !TEX root = ../main.tex
 \chapter{结果对比}
-本章主要进行了绘制效果，算法效率，算法精度这三方面的对比，我们进行对比实验的硬件条件如下：CPU为英特尔酷睿i7 4710MQ@2.50GHz，GPU为英伟达GeForce GT 730M，内存大小为8GB。对比的对象是传统的自由变形和光滑自由变形\cite{Cui15}。选用的变形空间均为B样条体，其次数为$3\times3\times3$，控制顶点个数为$6\times6\times6$。为了方便比较，待变形的模型顶点都将先归一化到$[-1, 1]^3$
+本章主要进行了绘制效果，算法效率，算法精度这三方面的对比，我们进行对比实验的硬件条件如下：CPU为英特尔酷睿i7 4710MQ@2.50GHz，GPU为英伟达GeForce GT 730M，内存大小为8GB。对比的对象是传统的自由变形\cite{Sederberg86}和光滑自由变形\cite{Cui15}。选用的变形空间均为B样条体，其次数为$3\times3\times3$，控制顶点个数为$6\times6\times6$。为了方便比较，待变形的模型顶点都将先归一化到$[-1, 1]^3$
 
-由于光滑自由变形和本文算法最终的变形结果均为三角Bézier曲面片，本文采取与光滑自由变形相同的方案可视化这些曲面片，即均匀离散成三角形然后通过OpenGL绘制。用户可以通过参数控制三角Bézier曲面片的细分粒度，以将Bézier曲面片组成的模型离散在不同精度的多边行模型。在本章的实验中，所有三角Bézier曲面片将被均匀离散成100个小三角形进行绘制。同时在比较光滑自由变形和本文方法的拟合误差时，误差值也是通过比较离散后三角形顶点的属性得到的。
+由于光滑自由变形和本文算法最终的变形结果均为三角Bézier曲面片，本文采取与光滑自由变形相同的方案可视化这些曲面片，即均匀细分成三角形然后通过OpenGL绘制。用户可以通过参数控制三角Bézier曲面片的细分粒度，以将解析结果细分成不同精度的三角网格模型。在本章的实验中，所有三角Bézier曲面片都将被均匀细分成100个小三角形进行绘制。同时在比较光滑自由变形和本文方法的拟合误差时，误差值也将通过比较细分后三角形顶点的属性得到的。
 
 在以下对比实验中，本文方法在分割阶段时，$l$的值固定为$\frac{1}{3}$的节点盒长度。
 
@@ -129,15 +129,16 @@
 \end{table}
 本文采用OpenGL Compute Shader实现，为了尽可能提高运行效率，\autoref{tab:deformation_time_compare}中的几个阶段实现在了同一个Shader中，所以以上几个阶段本文方法只给出了总运行时间。
 
-光滑自由变形由CUDA实现，该方法在实现上述过程时，大量的采用了大矩阵乘法，并交由cuBLAS计算。cuBLAS是CUDA官方提供的线性运算库，在相同的硬件下，实现相同的计数任务，用户自己编写的程序很难在时间效率上超过cuBLAS。所以我们有理由将光滑自由变形的变形过程所用的时间作为一个性能的标杆。本文以之为目标，作了很多语言层面上的优化。最终得到的结果只比光滑自由变形慢了$2.99\%$。考虑到我们的算法采用的OpenGL Compute Shader实现，OpenGL Compute Shader并末提供大矩阵运算库，无法从大矩阵运算中得益，所以我们认为本文变形所用的时间是一个较为合理的结果。
+光滑自由变形由CUDA实现，该方法在实现上述过程时，大量的采用了大矩阵乘法，并交由cuBLAS计算。cuBLAS是CUDA官方提供的线性运算库，在相同的硬件下，实现相同的计数任务，用户自己编写的程序很难在时间效率上超过cuBLAS。所以我们有理由将光滑自由变形的变形过程所用的时间作为一个性能的标杆。本文以之为目标，作了很多算法及语言层面上的优化。最终得到的结果只比光滑自由变形慢了$2.99\%$。考虑到我们的算法采用的OpenGL Compute Shader实现，OpenGL Compute Shader并末提供大矩阵运算库，无法从大矩阵运算中得益，所以我们认为本文变形所用的时间是一个较为合理的结果。
 
 \subsection{总结}
 综上所述，在变形、绘制阶段，本文算法基本能达到和光滑自由变形相同的运行速度。而在分割阶段，本文方法具有较大优势，约比光滑自由变形快了近200倍。
 
 \section{精度对比}
-虽然光滑自由变形基于精确自由变形，但是该方法最终变形结果是通过用低次的三角Bézier曲面片拟合高次的精确结果得到，这样虽然提高了算法的运行效率，但同时也引入了法向和几何上的误差。本文方法也存在相同的拟合误差，并且本文未沿节点盒切割原始三角面片，这也是一个误差增加潜在的因素。本节希望通过误差分析说明本文方法的误差相较于自由变形并不会增加很多。
+虽然光滑自由变形基于精确自由变形，但是该方法最终变形结果是通过用低次的三角Bézier曲面片拟合高次的精确结果得到，这样虽然提高了算法的运行效率，但同时也引入了法向和几何上的误差。本文方法也存在相同的拟合误差，并且本文未沿节点盒切割原始三角面片，这也是一个误差增加的潜在因素。本节希望通过误差分析说明本文方法的误差相较于自由变形并不会有显著增加。
 
-本节中，本文方法的比较对象仍是光滑自由变形，我们分别计算光滑自由变形、本文方法的变形结果与精确结果的差异以得到两种方法对应的误差值。与光滑自由变形一样，本文方法也会通过法向信息微调三角Bézier曲面片的控制顶点。所以我们需要几何与法向都精确的模型作为本节实验变形所用的模型。为此我们选择了一个标准的立方体和一个由36个三次Bézier曲面组成的犹他茶壶作为变形模型进行误差分析，如\autoref{fig:error_ori}所示。标准立方体的精确变形结果可以通过精确自由变形\cite{Feng00}得到，犹他茶壶的精确变形结果可以通过传统FFD结合均匀加密采样等到。由于犹他茶壶是由Bézier曲面片组成的，所以必须先转化成多边形网格才能作为变形算法的输入，我们采用Casteljau细分算法将其转化成多边形网格。
+本节中，本文方法的比较对象仍是光滑自由变形，我们分别计算光滑自由变形、本文方法的变形结果与精确结果的差异以得到两种方法对应的误差值。与光滑自由变形一样，本文方法也会通过法向信息微调三角Bézier曲面片的控制顶点。所以我们需要几何与法向都精确的模型作为本节实验变形所用的模型。为此我们选择了一个标准的立方体和一个由36个三次Bézier曲面组成的Utah茶壶作为变形模型进行误差分析，如\autoref{fig:error_ori}所示。标准立方体的精确变形结果可以通过精确自由变形\cite{Feng00}得到，Utah茶壶的精确变形结果可以通过传统FFD结合均匀加密采样得到。由于Utah茶壶是由Bézier曲面片组成的，所以必须先转化成多边形网格才能作为变形算法的输入，我们采用Casteljau细分算法\cite{farin2000essentials}将其转化成多边形网格。
+
 \begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{.4\textwidth}
@@ -149,13 +150,13 @@
 	\begin{subfigure}[b]{.4\textwidth}
 		\centering
 		\includegraphics[width = \textwidth]{teapot0.png}
-		\caption{犹他茶壶}\label{subfig:teapot0}
+		\caption{Utah茶壶}\label{subfig:teapot0}
 	\end{subfigure}
 	\quad
 	\caption{误差估计采用的模型}\label{fig:error_ori}
 \end{figure}
 
-\autoref{fig:cube_result}和\autoref{fig:teapot_result}是分别是立方体和犹他茶壶的在各个变形方法下的变形结果。
+\autoref{fig:cube_result}和\autoref{fig:teapot_result}是分别是立方体和Utah茶壶的在各个变形方法下的变形结果。
 
 \begin{figure}[htbp]
 	\centering
@@ -194,10 +195,10 @@
 		\includegraphics[width = \textwidth]{teapot3.png}
 		\caption{本文结果}\label{subfig:teapot3}
 	\end{subfigure}
-	\caption{犹他茶壶变形结果}\label{fig:teapot_result}
+	\caption{Utah茶壶变形结果}\label{fig:teapot_result}
 \end{figure}
 
-\autoref{subfig:cube1}是立方体模型通过精确自由变形得到的结果，该结果是精确的，所以光滑自由变形和本文方法得到的结果（如图\autoref{subfig:cube2}与\autoref{subfig:cube3}所示）都与精确自由变形得到的结果进行比较，以得到光滑自由变形和本文方法的变形误差，结果如\autoref{tab:error_cube}所示。其中，几何误差定义为对应点的欧氏距离，法向误差定义为对应点法向所成夹角的角度。从\autoref{tab:error_cube}中可以看出，本文方法的几何误差与法向误差均小于光滑自由变形，主要原因是本文方法选取的$l$比较小，产生的子三角形要比光滑自由变形小很多。\autoref{fig:cube_error0}、\autoref{fig:cube_error1}中是上述误差的可视化结果。
+\autoref{subfig:cube1}是立方体模型通过精确自由变形得到的结果，该结果是精确的，所以光滑自由变形和本文方法得到的结果（如图\autoref{subfig:cube2}与\autoref{subfig:cube3}所示）都与精确自由变形得到的结果进行比较，以得到两者的变形误差，结果如\autoref{tab:error_cube}所示。其中，几何误差定义为对应点的欧氏距离，法向误差定义为对应点法向所成夹角的角度。从\autoref{tab:error_cube}中可以看出，本文方法的几何误差与法向误差均小于光滑自由变形，主要原因是本文方法选取的$l$比较小，产生的子三角形要比光滑自由变形小很多。\autoref{fig:cube_error0}、\autoref{fig:cube_error1}中是上述误差的可视化结果。
 
 \begin{table}[htbp]
     \centering
@@ -241,7 +242,7 @@
 	\caption{立方体法向误差}\label{fig:cube_error1}
 \end{figure}
 
-对于犹他茶壶，对比结果如\autoref{tab:error_utah}所示。我们同样给出了上述误差的可视化结果，如\autoref{fig:teapot_error0}、\autoref{fig:teapot_error1}所示。犹他茶壶经过Casteljau细分算法得到的三角形本身比较小，所以本文方法中较小的$l$没有优势，所以两种结果的几何误差和法向误差较为接近。同时从\autoref{subfig:teapot5}和\autoref{subfig:teapot7}可以看出，无论上本文方法还是光滑自由变形，曲率较大的地方法向误差都会比较大。
+对于Utah茶壶，对比结果如\autoref{tab:error_utah}所示。我们同样给出了上述误差的可视化结果，如\autoref{fig:teapot_error0}、\autoref{fig:teapot_error1}所示。Utah茶壶经过Casteljau细分算法得到的三角形本身比较小，因此本文方法中较小的$l$没有优势，所以两种结果的几何误差和法向误差较为接近。同时从\autoref{subfig:teapot5}和\autoref{subfig:teapot7}可以看出，无论上本文方法还是光滑自由变形，曲率较大的地方法向误差都会比较大。
 
 \begin{table}[htbp]
     \centering
@@ -253,7 +254,7 @@
         光滑自由变形& \num{0.006650957} & \num{0.01220984} & \num[scientific-notation=false]{0.5491496}$^\circ$ & \num[scientific-notation=false]{22.53010}$^\circ$ \\
     \bottomrule
     \end{tabular}
-    \caption{犹他茶壶误差} \label{tab:error_utah}
+    \caption{Utah茶壶误差} \label{tab:error_utah}
 \end{table}
 
 \begin{figure}[htbp]
@@ -268,7 +269,7 @@
 		\includegraphics[width = \textwidth]{teapot6.png}
 		\caption{光滑自由变形几何误差图}\label{subfig:teapot6}
 	\end{subfigure}
-	\caption{犹他茶壶几何误差}\label{fig:teapot_error0}
+	\caption{Utah茶壶几何误差}\label{fig:teapot_error0}
 \end{figure}
 \begin{figure}[htbp]
 	\centering
@@ -282,5 +283,5 @@
 		\includegraphics[width = \textwidth]{teapot7.png}
 		\caption{光滑自由变形法向误差图}\label{subfig:teapot7}
 	\end{subfigure}
-	\caption{犹他茶壶法向误差}\label{fig:teapot_error1}
+	\caption{Utah茶壶法向误差}\label{fig:teapot_error1}
 \end{figure}
