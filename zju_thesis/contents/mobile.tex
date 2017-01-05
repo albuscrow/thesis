@@ -1,6 +1,15 @@
 % !TEX root = ../main.tex
-\chapter{算法在移动平台的实现}
-本文方法用OpenGL Compute Shader实现，所以理论上可以在任何支持OpenGL 4.3及以上版本的设备上运行。为了验证这一点，我们将本文方法应用到了哇陶中。哇陶是一款安卓平台上的陶瓷制作模拟软件。用户可以借助该软件体验陶瓷制作全过程\footnote{不同的瓷器，制作步骤会有所区别。哇陶中的过程与常用的青花瓷制作过程保持一致，即泥胚塑形、烧制、贴花、落款、烤花。}，软件截图如\autoref{fig:watao}所示。如果用户对自己制作的瓷器感到很满意，还可以通过\autoref{subfig:watao_5}所示界面下单购买。
+\chapter{算法在移动平台的应用}
+    本文方法用OpenGL Compute Shader实现，所以理论上可以在任何支持OpenGL 4.3及以上版本的设备上运行。为了验证这一点，我们将本文方法应用到了哇陶中。
+
+    哇陶是一款安卓平台上的陶瓷制作模拟软件。用户可以借助该软件体验陶瓷制作全过程\footnote{不同的瓷器，制作步骤会有所区别。哇陶中的过程与常用的青花瓷制作过程保持一致，即泥胚塑形、烧制、贴花、落款、烤花。}，软件流程如\autoref{fig:watao}所示：
+    \begin{enumerate}
+        \item 通过触控模拟拉胚过程，将瓷器塑造成自由想要的形状，如\autoref{subfig:watao_1}所示。
+        \item 初步烧制后，选择软件中提供的一些花纹贴到瓷器的不同位置，也可以将手机相册中的照片直接贴到瓷器中。如\autoref{subfig:watao_2}所示。
+        \item 将自己的落款印在瓷器底部，这一过程中可以选择不同落款款式。如\autoref{subfig:watao_3}所示。
+        \item 低温烤花，将花纹和落款固定在瓷器中。如\autoref{subfig:watao_4}所示。
+        \item 该步骤可选，如果用户对自己制作的瓷器感到很满意，还可以通过\autoref{subfig:watao_5}所示界面下单购买。
+    \end{enumerate}
 
 \begin{figure}[htbp]
 	\centering
@@ -38,6 +47,40 @@
 	\end{subfigure}
 
 	\caption{哇陶截图}\label{fig:watao}
+\end{figure}
+
+\section{拉胚过程的实现}
+
+瓷器用如\autoref{fig:pottery_mesh}所示的网格模型表示，模型由内外两层网格组成，每一层网格垂直方向上有50个圆环，每个圆环由100个三角面片组成。其中\autoref{subfig:pottery_mesh_0}是初始的模型，其形状并不规则，因为我们在生成模型的时候添加了一点随机的扰动，使初始泥胚的造型更接近实际情况。\autoref{subfig:pottery_mesh_0}是用户造型后的瓷器模型。因为模型的表示较为规则，所以可以方便的将模型塑造成类似\autoref{subfig:pottery_mesh_1}那样的旋转体造型：用户手指上滑时增加模型的高度，即均匀增加垂直方向上每一层高度；用户手指水平滑动时，先根据手指点击位置计算出用户“点击”到瓷器上的点，再根据滑动幅度大小相应的调整该点所在的圆环及邻近圆环的半径，以达到改变瓷器器身粗细的目的。离用户点击位置越远的圆环变化幅度越小。该过程如\autoref{fig:shape}所示，
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+	    \includegraphics[width = \textwidth]{pottery_mesh_0.png}
+		\caption{初始瓷器网格模型}\label{subfig:pottery_mesh_0}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{pottery_mesh_1.png}
+		\caption{拉胚后瓷器网格模型}\label{subfig:pottery_mesh_1}
+	\end{subfigure}
+	\caption{瓷器网格模型}\label{fig:pottery_mesh}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+	    \includegraphics[width = \textwidth]{shape_0.png}
+		\caption{水平拉胚之前}\label{subfig:shape_0}
+	\end{subfigure}
+	\begin{subfigure}[b]{.4\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{shape_1.png}
+		\caption{一次水平拉胚之后}\label{subfig:shape_1}
+	\end{subfigure}
+	\caption{拉胚过程}\label{fig:shape}
 \end{figure}
 
 在真实的陶瓷制作过程中，泥胚塑形阶段，制作陶瓷的工匠不仅可以通过转台将瓷器拉成一个完全对称的旋转体，如\autoref{subfig:pottery_shape_0}所示，还可以通过手工捏胚将瓷器塑造成更具创造性的形状，如\autoref{subfig:pottery_shape_1}所示。其中拉胚过程在软件中较容易模拟，略过不述。手工捏胚过程则通过本文方法实现，以帮助用户得到满意的造型。
