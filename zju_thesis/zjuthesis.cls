@@ -926,7 +926,8 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 章节目录
 \renewcommand\tableofcontents{%
 	% 使用\npchapter，将标题插入目录，但是不产生页码和中间点线。
-	\chapter*{\contentsname}
+	\if@openright\cleardoublepage\else\clearpage\fi%
+	\chapter{\contentsname}
 	\markboth{\contentsname}{}
 	\@starttoc{toc}}
 
@@ -987,7 +988,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 图目录
 \renewcommand\listoffigures{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
-	\chapter*{\listfigurename}
+	\chapter{\listfigurename}
 	\@starttoc{lof}}
 
 \renewcommand*\l@figure{\@dottedtocline{1}{0\p@}{2.3em}}
@@ -995,7 +996,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 %% 表目录
 \renewcommand\listoftables{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
-	\chapter*{\listtablename}
+	\chapter{\listtablename}
 	\@starttoc{lot}}
 
 \let\l@table\l@figure
