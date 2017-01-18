@@ -1025,7 +1025,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 
 % 采用gbt7714-2005参考文献样式，
 % 参考自https://github.com/githamburger/GBT7714-2005-BibTeX-Style
-\bibliographystyle{reference_data_base/gbt7714-2005}
+\bibliographystyle{reference_data_base/GBT7714-2005NLang-ZJU}
 
 % natbib宏包命令，参考文献上标设置。
 \setcitestyle{super,square,comma}

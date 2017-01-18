@@ -3,13 +3,13 @@
 % 定义英文摘要和关键字
 
 \begin{eabstract}
-    Free-form deformation(FFD) is a prevalent shape manipulation and shape animation method in computer graphics and geometric modeling. It is widely used in Computer-aided Design, Computer Animation, Medical Imaging and so on. However, there are some disadvantages in the FFD, such as the aliasing of deformation result, universality and robustness, low efficiency and so on. In order to address these problems, we propose the Improved Smooth Free-form Deformation.
+    Free-form deformation(FFD) is a prevalent shape manipulation and shape animation method in computer graphics and geometric modeling. It is widely used in computer-aided design, computer animation, medical imaging and so on. However, there are some disadvantages in the FFD, such as the aliasing of deformation result, universality and robustness, low efficiency and so on. In order to address these problems, we propose the improved smooth free-form deformation.
 
-    Our method will be used to clip the original model to avoid pathological case. Our subdivision method will produce sub-triangles as regular as possible, but cannot guarantee that each sub-triangle lies in a knot box. Accordingly the method will introduce acceptable errors. However, the trade-off is worthwhile in accordance with Error analysis. 
+    Firstly, we propose a new method called "triangle uniform subdivision algorithm" to clip the original model. It receives a triangle as input and subdivide it to sub-triangles whose side length and area will be as equal as possible. This method can avoid pathological case. We also compare our method and the smooth free-form deformation's to find out the effect of our method on deform quality and efficiency.
 
-    Moreover, we implement the whole framework of Improved Smooth FFD with OpenGL compute shader in order to make it more general. We also extend the deformation framework to the mobile phone by the aid of the across-platform of OpenGL.
+    Moreover, we implement the whole framework of improved smooth FFD with OpenGL compute shader in order to make it more general. We also extend the deformation framework to the mobile phone by the aid of the across-platform of OpenGL.
 
-    Finally, we contrast our method with the Smooth FFD and Accurrate FFD to show the advantage of our method.
+    Finally, we compare our method with the smooth FFD and accurrate FFD to show the advantage of our method.
 \end{eabstract}
 
 \ekeywords{smooth FFD, sharp feature preserving, GPU, OpenGL compute shader, normal field}

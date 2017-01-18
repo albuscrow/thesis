@@ -44,7 +44,7 @@
 		\includegraphics[width = \textwidth]{FFD_demo_1.png}
 		\caption{FFD变形结果}\label{subfig:FFD_demo_1}
 	\end{subfigure}
-    \caption{自由变形示意图}\label{fig:FFD_demo}
+    \caption{自由变形示意图\cite{Sederberg86}}\label{fig:FFD_demo}
 \end{figure}
 
     该方法具有直观、简单、高效的优点，很多学者在在此基础上提出了大量基于FFD算法的研究与改进。
@@ -78,7 +78,7 @@
 		\includegraphics[width = \textwidth]{sample_problem_2.png}
 		\caption{传统FFD变形结果}\label{subfig:sample_problem_1}
 	\end{subfigure}
-    \caption{传统FFD由于采样密度不足造成的精度问题}\label{fig:sample_problem}
+    \caption{传统FFD由于采样密度不足造成的精度问题\cite{Cui15}}\label{fig:sample_problem}
 \end{figure}
 
     解决这一问题最直接的思路是通过均匀加密采样增加采样点的密度，但这一方法会造成性能上较大的开销。更进一步的方法\cite{parry1986, gain1999, griessmair1989deformation}是根据面片大小和曲面的曲率，自适应确定采样密度.自适应采样虽然从性能上较之均匀加密采样有了一定的提升，但自适应算法实现相对复杂，并且无法很好的处理一些奇异情况。
@@ -106,7 +106,7 @@
 		\includegraphics[width = \textwidth]{sample_problem_affd.png}
 		\caption{精确FFD变形结果}
 	\end{subfigure}
-    \caption{传统FFD和精确FFD的结果对比}\label{fig:sample_problem_affd}
+    \caption{传统FFD和精确FFD的结果对比\cite{Cui15}}\label{fig:sample_problem_affd}
 \end{figure}
 
 作者在后续工作\cite{Feng00, Feng02}中对上述算法进行了改进，不仅使算法开销更低，还提升了算法的通用性。尽管如此，采用精确自由变形编辑较大的模型时，仍然无法做到实时交互。
