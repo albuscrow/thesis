@@ -196,7 +196,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 % 双面打印时空白页中间显示文本
 \newcommand*{\ZJU@blankpage}{%
 	\par\vspace*{\fill}%
-	\centerline{This page is intentionally left blank.}\par
+	\centerline{}\par
 	\vspace{\fill}}
 % 重新定义cleardouble，其原始定义在
 \def\cleardoublepage{%
@@ -300,7 +300,7 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 
 
 % 设置中文正文字体为仿宋，加粗为黑体，斜体为楷体
-\setCJKmainfont[BoldFont={SimHei}, ItalicFont={KaiTi}]{FangSong}
+\setCJKmainfont[BoldFont={SimHei}, ItalicFont={KaiTi}]{SimSun}
 % 中文无衬线字体，不知道怎么设置，待以后解决。
 % \setCJKsansfont{}
 % 由于汉字都是等宽的，等宽字体通常应用在代码中，故这里选择用幼圆字体，具体有待以

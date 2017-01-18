@@ -3,13 +3,13 @@
 % 定义英文摘要和关键字
 
 \begin{eabstract}
-    Free-form deformation(FFD) is a prevalent shape manipulation and shape animation method in computer graphics and geometric modeling. It is widely used in computer-aided design, computer animation, medical imaging and so on. However, there are some disadvantages in the FFD, such as the aliasing of deformation result, universality and robustness, low efficiency and so on. In order to address these problems, we propose the improved smooth free-form deformation.
+    Space deformation is one of key methods of shape manipulation and soft object animation in geometric modeling and computer graphics. Free-form Deformation (FFD) is the representative one among them. Due to its simplicity, intuitiveness, flexibility, it has been integrated into mainstream commercial animation softwares, such as 3DS Max, Maya, Softimage XSI, etc. In this thesis, an improved smooth FFD is proposed to address the problems of hardware-dependence and robustness in the traditional GPU-based FFD methods.
 
-    Firstly, we propose a new method called "triangle uniform subdivision algorithm" to clip the original model. It receives a triangle as input and subdivide it to sub-triangles whose side length and area will be as equal as possible. This method can avoid pathological case. We also compare our method and the smooth free-form deformation's to find out the effect of our method on deform quality and efficiency.
+    Firstly, we propose a new method of uniformly subdividing the original model in the framework of smooth FFD. It receives a triangle as input and subdivides it to sub-triangles whose side length and area will be as equal as possible. The method can avoid pathological cases in traditional GPU-based FFD and generate the sub-triangles as uniform as possible. Furthermore, the subdivision method can be fully implemented on GPU. As a result, the smooth FFD becomes more robust and efficient.
 
-    Moreover, we implement the whole framework of improved smooth FFD with OpenGL compute shader in order to make it more general. We also extend the deformation framework to the mobile phone by the aid of the across-platform of OpenGL.
+    To overcome the problem of hardware-dependence in previous GPU-based FFD, we also proposed a new GPU-based improved smooth FFD by using OpenGL compute shader. All of the intensive computations are designed and implemented on GPU provided that the universality and efficiency of the proposed algorithm are guaranteed.  We also integrate the proposed algorithm into a 3D geometric modeling APP, namely, Wowtao, by the aid of the cross-platform property of OpenGL. It verifies the universality and feasibility of the proposed algorithm to achieve 3D shape editing in a resource-constrained hardware.
 
-    Finally, we compare our method with the smooth FFD and accurrate FFD to show the advantage of our method.
+Finally, we compare the proposed method with the smooth FFD and accurate FFD thoroughly and show that the proposed method has the advantages of efficiency, robustness and cross-platform. It extends the potential application scenarios of FFD.
 \end{eabstract}
 
 \ekeywords{smooth FFD, sharp feature preserving, GPU, OpenGL compute shader, normal field}
