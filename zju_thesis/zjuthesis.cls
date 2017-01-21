@@ -166,21 +166,21 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \setlength\topskip{16\p@}		% 每页第一行的行间距
 \setlength\footskip{30\p@}		% 页脚基线与每一页最后一行文本基线的距离
 \setlength\maxdepth{.5\topskip}	% \maxdepth + \topskip = typesize × 1.5
-\setlength\textwidth{16.4cm}	% book.cls文档对texthight和textwidth的
-\setlength\textheight{24.7cm}	% 定义比较复杂，但是比较合理
+\setlength\textwidth{14.6cm}	% book.cls文档对texthight和textwidth的
+\setlength\textheight{23cm}	% 定义比较复杂，但是比较合理
 \setlength\marginparsep{10\p@}	% 边注与正文区域的间距
 %\setlength\marginparpush{7\p@}	% 两个边注之间的距离，感觉设不设置无所谓
 % 单双页面边栏设置
 \if@twoside
-	\setlength\oddsidemargin{2.6cm}
+	\setlength\oddsidemargin{3.5cm}
 	\addtolength\oddsidemargin {-1in}
-	\setlength\evensidemargin{2cm}
+	\setlength\evensidemargin{2.9cm}
 	\addtolength\evensidemargin {-1in}
 	\setlength\marginparwidth{45\p@}
 \else
-	\setlength\oddsidemargin{2.4cm}		% 根据要求，默认单面打印左边距为2.4cm。
+	\setlength\oddsidemargin{3.2cm}		% 根据要求，默认单面打印左边距为2.4cm。
 	\addtolength\oddsidemargin {-1in}	% 发现latex2e默认在页面四周各留出1in的空白，
-	\setlength\evensidemargin{2.4cm}	% 所以要减去这1in。
+	\setlength\evensidemargin{3.2cm}	% 所以要减去这1in。
 	\addtolength\evensidemargin {-1in}	% oneside下奇偶页侧边空白相同。
 	\setlength\marginparwidth{50\p@}
 \fi
@@ -263,13 +263,13 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \fi
 % 重新定义\chaptermark，使其为\leftmark引用。
 \renewcommand\chaptermark[1]{%
-\markboth{\MakeUppercase{%
+\markboth{%
 \ifnum \c@secnumdepth >\m@ne
 	\if@mainmatter
 		\@chapapp  \hskip1em%
 	\fi
 \fi
-#1}}{}}
+#1}{}}
 
 %---------- 本机字体设置 ----------
 \RequirePackage{fontspec}
@@ -871,9 +871,13 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 									{\parindent \z@ \raggedright
 									 \fangsong\zihao{-4}}}
 
-
-% \frontmatter,\mainmatter,\backmatter重定义。
-\renewcommand\frontmatter{%
+% \absmatter,\tocmatter,\mainmatter,\backmatter重定义。
+\newcommand\absmatter{%
+	\if@openright\cleardoublepage\else\clearpage\fi%
+	\@mainmatterfalse
+	\pagenumbering{roman}
+	\pagestyle{ZJU@headings}}
+\newcommand\tocmatter{%
 	\if@openright\cleardoublepage\else\clearpage\fi%
 	\@mainmatterfalse
 	\pagenumbering{Roman}
@@ -906,8 +910,8 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 
 %---------- 目录（目录） ----------
 \renewcommand{\contentsname}{目\texorpdfstring{\ZJUspace}{}录}				% 重命名章节目录名。
-\renewcommand{\listfigurename}{插\texorpdfstring{\ZJUspace}{}图}			% 重命名插图目录名。
-\renewcommand{\listtablename}{表\texorpdfstring{\ZJUspace}{}格}				% 重命名表目录名。
+\renewcommand{\listfigurename}{图\ZJU@spaceChar 目\ZJU@spaceChar 录}			% 重命名插图目录名。
+\renewcommand{\listtablename}{表\ZJU@spaceChar 目\ZJU@spaceChar 录}				% 重命名表目录名。
 
 % 下一条命令作用：在toc目录文件中插入‘\let\CTEX@spaceChar\relax’字符，用以删除目
 % 录中的空格字符，其空格字符由\CTEX@spaceChar定义。

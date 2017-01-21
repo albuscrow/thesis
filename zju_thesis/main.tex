@@ -2,7 +2,7 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX builder = LATEXMK
 % !TEX program = xelatex
-\documentclass[twoside,nocpsupervisor]{zjuthesis}
+\documentclass[oneside,nocpsupervisor]{zjuthesis}
 
 %\documentclass[doctor,twoside,nocpsupervisor]{zjuthesis}
 \usepackage{color}
@@ -74,9 +74,10 @@
 % \ZJUmakecover
 % \ZJUmakeCNtitlepage
 % \ZJUmakeENtitlepage
-\frontmatter
+\absmatter
 \include{contents/abstract_chinese}
 \include{contents/abstract_english}
+\tocmatter
 % 正文目录：
 \tableofcontents
 % 插图目录：

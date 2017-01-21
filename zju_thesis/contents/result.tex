@@ -80,6 +80,7 @@
 
 \begin{table}[htbp]
     \centering
+    \caption{三角形分割阶段运行时间对比(单位：ms)}\label{tab:clip_time_compare}
     \begin{tabular}{lrr}
     \toprule
     \textbf{步骤}   & \textbf{本文方法} & \textbf{光滑自由变形\cite{Cui15}} \\
@@ -90,7 +91,6 @@
     \textbf{总计}   & 26.093            & 5131.883                          \\
     \bottomrule
     \end{tabular}
-    \caption{三角形分割阶段运行时间对比(单位：ms)}\label{tab:clip_time_compare}
 \end{table}
 
 \subsection{变形、绘制阶段}
@@ -112,6 +112,7 @@
 
 \begin{table}[htbp]
     \centering
+    \caption{三角形变形、绘制阶段运行时间对比(单位：ms)}\label{tab:deformation_time_compare}
     \begin{tabular}{lrr}
     \toprule
     \textbf{步骤}     & \textbf{本文方法} & \textbf{光滑自由变形\cite{Cui15}} \\
@@ -125,7 +126,6 @@
     \textbf{总计}& 67.419  & 65.464    \\
     \bottomrule
     \end{tabular}
-    \caption{三角形变形、绘制阶段运行时间对比(单位：ms)}\label{tab:deformation_time_compare}
 \end{table}
 本文采用OpenGL Compute Shader实现，为了尽可能提高运行效率，\autoref{tab:deformation_time_compare}中的几个阶段实现在了同一个Shader中，所以以上几个阶段本文方法只给出了总运行时间。
 
@@ -202,6 +202,7 @@
 
 \begin{table}[htbp]
     \centering
+    \caption{立方体误差} \label{tab:error_cube}
     \begin{tabular}{lrrrr}
     \toprule
                     & 平均几何误差 & 最大几何误差 & 平均法向误差 & 最大法向误差 \\
@@ -210,7 +211,6 @@
         光滑自由变形& \num{0.004904391} & \num{0.03718415} & \num[scientific-notation=false]{0.5853341}$^\circ$ & \num[scientific-notation=false]{21.24638}$^\circ$ \\
     \bottomrule
     \end{tabular}
-    \caption{立方体误差} \label{tab:error_cube}
 \end{table}
 
 \begin{figure}[htbp]
@@ -246,6 +246,7 @@
 
 \begin{table}[htbp]
     \centering
+    \caption{Utah茶壶误差} \label{tab:error_utah}
     \begin{tabular}{lrrrr}
     \toprule
         & 平均几何误差 & 最大几何误差 & 平均法向误差 & 最大法向误差 \\
@@ -254,7 +255,6 @@
         光滑自由变形& \num{0.006650957} & \num{0.01220984} & \num[scientific-notation=false]{0.5491496}$^\circ$ & \num[scientific-notation=false]{22.53010}$^\circ$ \\
     \bottomrule
     \end{tabular}
-    \caption{Utah茶壶误差} \label{tab:error_utah}
 \end{table}
 
 \begin{figure}[htbp]

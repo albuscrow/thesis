@@ -110,7 +110,7 @@ Cui等人在实验后\cite{Cui15}发现，三次的曲面片已经能够提供�
 \end{figure}
 
 \section{几何微调}
-\autoref{subfig:sffd_smooth_0}中的结果，尽管着色结果很光滑，但是几何方面仍然存在走样。\autoref{subfig:sffd_smooth_0}中的框出来的部分，红色部分和绿色部分分别体现了尖锐边界和侧影轮廓线的走样。为了解决这些问题，得到视觉上更加细腻的变形结果，算法还将根据法向信息对表示几何的三角Bézier曲面片的控制顶点进行了微调。最终输出光滑并保持尖锐特征的结果，如\autoref{subfig:sffd_smooth_1}所示。
+\autoref{subfig:sffd_smooth_0}中的结果，尽管着色结果很光滑，但是几何方面仍然存在走样。\autoref{subfig:sffd_smooth_0}\\中的框出来的部分，红色部分和绿色部分分别体现了尖锐边界和侧影轮廓线的走样。为了解决这些问题，得到视觉上更加细腻的变形结果，算法还将根据法向信息对表示几何的三角Bézier曲面片的控制顶点进行了微调。最终输出光滑并保持尖锐特征的结果，如\autoref{subfig:sffd_smooth_1}所示。
 
 以上就是光滑自由变形的大致步骤，其算法流程如\autoref{fig:algorithm_sffd}所示，在下文将介绍本文算法在此基础上进行的改进。
 
