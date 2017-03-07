@@ -34,7 +34,7 @@
 
     \item \autoref{subfig:clip16}中剩余部分若逆时针旋转90度，我们可以发现剩余部分和\autoref{subfig:clip3}类似。所以我们递归的进行步骤\ref{recursion}，直到三角形分割完毕。\label{recursion2}
 
-    \item 对分割结果进行5次CVT\cite{du1999}优化，使子三角形边长更加接近$l$。\label{CVT}
+    \item 对分割结果进行5次CVT优化\cite{du1999}，使子三角形边长更加接近$l$。\label{CVT}
 \end{enumerate}
 
 在步骤\ref{recursion2}中，递归到最后阶段，可能会出现步骤\ref{recursion}处理不了的特殊情况。但是特殊情况的类型不会很多，所以我们枚举出了每一种特殊情况所对应的分割方案。
@@ -107,7 +107,7 @@
 	\caption{均匀三角剖分算法}\label{fig:clip}
 \end{figure}
 
-CVT\cite{du1999}优化可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之后的结果，灰色的是优化之前的。我们可以发现，从第5次迭代开始，每次迭代后的收益很小。所以我们最终选择对原始分割结果进行5次CVT迭代优化。
+CVT优化\cite{du1999}可以使分割更加均匀。且该过程可以迭代进行，使分割结果越来越均匀。\autoref{fig:CVT}展示了迭代过程，红色是优化之后的结果，灰色的是优化之前的。我们可以发现，从第5次迭代开始，每次迭代后的收益很小。所以我们最终选择对原始分割结果进行5次CVT迭代优化。
 
 \begin{figure}[htbp]
 	\centering
