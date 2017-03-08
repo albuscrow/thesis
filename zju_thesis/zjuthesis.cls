@@ -166,21 +166,21 @@ Created: 2014.09.15 by Sky and Hamburger, Last Modified: 2014.09.12 by Hamburger
 \setlength\topskip{16\p@}		% 每页第一行的行间距
 \setlength\footskip{30\p@}		% 页脚基线与每一页最后一行文本基线的距离
 \setlength\maxdepth{.5\topskip}	% \maxdepth + \topskip = typesize × 1.5
-\setlength\textwidth{14.6cm}	% book.cls文档对texthight和textwidth的
-\setlength\textheight{23cm}	% 定义比较复杂，但是比较合理
+\setlength\textwidth{15cm}	% book.cls文档对texthight和textwidth的
+\setlength\textheight{24cm}	% 定义比较复杂，但是比较合理
 \setlength\marginparsep{10\p@}	% 边注与正文区域的间距
 %\setlength\marginparpush{7\p@}	% 两个边注之间的距离，感觉设不设置无所谓
 % 单双页面边栏设置
 \if@twoside
-	\setlength\oddsidemargin{3.5cm}
+	\setlength\oddsidemargin{3.4cm}
 	\addtolength\oddsidemargin {-1in}
-	\setlength\evensidemargin{2.9cm}
+	\setlength\evensidemargin{2.8cm}
 	\addtolength\evensidemargin {-1in}
 	\setlength\marginparwidth{45\p@}
 \else
-	\setlength\oddsidemargin{3.2cm}		% 根据要求，默认单面打印左边距为2.4cm。
+	\setlength\oddsidemargin{3.1cm}		% 根据要求，默认单面打印左边距为2.4cm。
 	\addtolength\oddsidemargin {-1in}	% 发现latex2e默认在页面四周各留出1in的空白，
-	\setlength\evensidemargin{3.2cm}	% 所以要减去这1in。
+	\setlength\evensidemargin{3.1cm}	% 所以要减去这1in。
 	\addtolength\evensidemargin {-1in}	% oneside下奇偶页侧边空白相同。
 	\setlength\marginparwidth{50\p@}
 \fi
